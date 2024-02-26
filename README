@@ -1,0 +1,81 @@
+# ft_ls
+
+- This project will only be evaluated by actual human beings. You are therefore free
+to organize and name your files as you wish, although you need to respect some
+requirements listed below.
+- Your project must be written in C.
+- The executable file must be named ft_ls.
+- You must submit a Makefile. That Makefile will have to compile the project and
+must contain the usual rules. It can only recompile the program if necessary.
+- If you are clever, you will use your library for your ft_ls, submit also your folder
+libft including its own Makefile at the root of your repository. Your Makefile
+will have to compile the library, and then compile your project.
+- You have to handle errors in a sensitive manner. In no way can your program quit
+in an unexpected manner (Segmentation fault, bus error, double free, etc). If you
+are unsure, handle the errors like ls.
+- Your program cannot have memory leaks.
+
+- Within your mandatory part you are allowed to use the following functions:
+    - write
+    - opendir
+    - readdir
+    - closedir
+    - stat
+    - lstat
+    - getpwuid
+    - getgrgid
+    - listxattr
+    - getxattr
+    - time
+    - ctime
+    - readlink
+    - malloc
+    - free
+    - perror
+    - strerror
+    - exit
+- You are allowed to use other functions to carry out the bonus part as long as their
+use is justified during your defence. For example, to use tcgetattr is justified in
+certain case, to use printf because you are lazy isn’t. Be smart!
+
+
+## Mandatory
+
+- You must recode the system’s command ls.
+- Its behavior must be identical to the original ls command with the following variations:
+    - Amongst the numerous options available, we are asking you to create the
+following: -l, -R, -a, -r and -t.
+    - We strongly recommend that you account for the implications of the
+option -R from the very beginning of your code...
+    - You do not have to deal with the multiple column format for the exit when
+the option -l isn’t in the arguments.
+    - You are not required to deal with ACL and extended attributes.
+    - The overall display, depending on each option, must stay as identical as possible to the system command. We will be cordial when grading either the
+padding or the pagination, but no information can be missing.
+
+
+### Options
+-l: use a long listing format
+-R: list subdirectories recursively
+-a: do not ignore entries starting with .
+-r: reverse order while sorting
+-t: sort by time, newest first; see --time
+
+## Bonus
+Find below a few ideas of interesting bonuses you could create. Some could even be useful. You can, of course, invent your own, which will then be evaluated by your evaluators
+according to their own taste.
+- Management of ACL and extended attributes.
+- Management of the columns without the option -l. (man 4 tty)
+- Management of options -u, -f, -g, -d, ...
+- Management of views in colors (Similar to option -G)
+- Optimization of your code (What is the response time of your ls on a BIG ls -lR
+for example?)
+
+### Options
+-u: with -lt: sort by, access time; with -l: show access time and sort by name; otherwise: sort by access time, newest first
+-f: list all entries in directory order (disable sorting)
+-g: like -l, but do not list owner
+-d: list directories themselves, not their contents
+
+
+-G: in a long listing, don't print group names
