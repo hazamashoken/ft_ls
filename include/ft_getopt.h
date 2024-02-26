@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_getopt.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:09:35 by tliangso          #+#    #+#             */
-/*   Updated: 2024/02/26 23:02:20 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/02/27 03:36:14 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,17 @@ int		g_optind;
 # define REQUIRED_ARG 1
 # define OPTIONAL_ARG 2
 
-
+/**
+ *
+```
+typedef struct s_option {
+	const char	*name;
+	int			has_arg;
+	int			*flag;
+	int			val;
+}			t_option;
+```
+*/
 typedef struct s_option {
 	const char	*name;
 	int			has_arg;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_getopt_long.c                                   :+:      :+:    :+:   */
+/*   ft_getopt_long copy.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 22:49:07 by tliangso          #+#    #+#             */
-/*   Updated: 2024/02/27 00:35:28 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/02/27 03:06:21 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int ft_getopt_long(int argc, char *const argv[], const char *optstring, \
 					}
 					longopt++;
 				}
-				return (write_err_long(argv[0], ": invalid option --1 '", argv[i]));
+				return (write_err_long(argv[0], ": invalid option -- '", argv[i]));
 			}
 			else
 			{

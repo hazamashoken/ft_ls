@@ -6,7 +6,7 @@
 /*   By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 22:49:07 by tliangso          #+#    #+#             */
-/*   Updated: 2024/02/27 00:42:31 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/02/27 03:37:19 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,69 +44,74 @@ int ft_getopt_long(int argc, char *const argv[], const char *optstring,
 				   const t_option *longopts, int *longindex)
 {
 	int opt;
-	static int i = 1;
+	static int current_index = 1;
 	const t_option *longopt;
 	const char *opt_ptr;
-	// static int i = 1;
 
 	g_optarg = NULL;
+
 	if (longindex != NULL)
 		*longindex = -1;
-	if (i >= argc || argv[i][0] != '-')
+
+	if (current_index >= argc || argv[current_index][0] != '-')
 		return (-1);
 
-	if (argv[i][1] == '-' && longopts != NULL)
+	if (argv[current_index][1] == '-' && longopts != NULL)
 	{
 		longopt = longopts;
 		while (longopt->name != NULL)
 		{
-			if (ft_strncmp(argv[i] + 2, longopt->name, ft_strlen(longopt->name) + 1) == 0)
+			if (ft_strncmp(argv[current_index] + 2, longopt->name, ft_strlen(longopt->name) + 1) == 0)
 			{
 				if (longindex != NULL)
-					*longindex = i;
+					*longindex = current_index;
+
 				if (longopt->has_arg == REQUIRED_ARG || longopt->has_arg == OPTIONAL_ARG)
 				{
-					if (argv[i][ft_strlen(longopt->name) + 2] == '=')
-						g_optarg = argv[i] + ft_strlen(longopt->name) + 3;
+					if (argv[current_index][ft_strlen(longopt->name) + 2] == '=')
+						g_optarg = argv[current_index] + ft_strlen(longopt->name) + 3;
 					else
 					{
-						if (i + 1 < argc && argv[i + 1][0] != '-')
-							g_optarg = argv[++i];
+						if (current_index + 1 < argc && argv[current_index + 1][0] != '-')
+							g_optarg = argv[++current_index];
 						else if (longopt->has_arg == REQUIRED_ARG)
 							return (write_err_arg(argv[0], longopt->name));
 					}
 				}
-				++i;
+				++current_index;
 				return (longopt->val);
 			}
 			longopt++;
 		}
-		return (write_err_long(argv[0], ": invalid option --1 '", argv[i]));
+		return (write_err_long(argv[0], ": invalid option -- '", argv[current_index]));
 	}
 	else
 	{
-		opt = argv[i][1];
+		opt = argv[current_index][1];
 		opt_ptr = ft_strchr(optstring, opt);
+
 		if (opt_ptr == NULL)
 			return (write_err(argv[0], ": invalid option -- '", argv[1][1]));
+
 		if (longindex != NULL)
-			*longindex = i;
+			*longindex = current_index;
+
 		if (*(opt_ptr + 1) == ':')
 		{
-			if (argv[i][2] != '\0')
-				g_optarg = argv[++i];
+			if (argv[current_index][2] != '\0')
+				g_optarg = argv[current_index] + 2;
 			else
 			{
-				if (i + 1 < argc && argv[i + 1][0] != '-')
-					g_optarg = argv[++i];
+				if (current_index + 1 < argc && argv[current_index + 1][0] != '-')
+					g_optarg = argv[++current_index];
 				else
 					return (write_err(argv[0], ": option requires an argument -- '", argv[1][1]));
 			}
 		}
-		++i;
+		++current_index;
 		return (opt);
 	}
-	++i;
+	++current_index;
 	return (-1);
 }
 

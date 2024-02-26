@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_getopt.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:05:47 by tliangso          #+#    #+#             */
-/*   Updated: 2024/02/19 16:35:01 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/02/27 03:37:08 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static int	write_err(char *prog_name, char *message, char current_arg)
 	write(STDERR_FILENO, message, ft_strlen(message));
 	write(STDERR_FILENO, &current_arg, 1);
 	write(STDERR_FILENO, "'\n", 2);
+
 	return ('?');
 }
 
@@ -26,22 +27,17 @@ static int	set_optarg(int argc, char *const argv[], \
 	const char *current_arg, int *current_index)
 {
 	if (current_arg[2] != '\0')
-	{
 		optarg = (char *)current_arg + 2;
-	}
 	else
 	{
 		(*current_index)++;
 		if (*current_index >= argc)
-		{
-			return (write_err(argv[0], ": option requires an argument -- '", \
-				current_arg[1]));
-		}
+			return (write_err(argv[0], ": option requires an argument -- '", current_arg[1]));
 		optarg = argv[*current_index];
 	}
+
 	return (0);
 }
-
 
 
 int	ft_getopt(int argc, char *const argv[], const char *optstring)
@@ -52,17 +48,21 @@ int	ft_getopt(int argc, char *const argv[], const char *optstring)
 	int			err;
 
 	optarg = NULL;
+
 	if (current_index >= argc || argv[current_index][0]  != '-')
 		return (-1);
+
 	current_arg = argv[current_index];
 	if (ft_strncmp(current_arg, "--", 2) == 0)
 	{
 		current_index++;
 		return (-1);
 	}
+
 	optchar = ft_strchr(optstring, current_arg[1]);
 	if (optchar == NULL)
 		return (write_err(argv[0], ": invalid option -- '", current_arg[1]));
+
 	if (optchar[1] == ':')
 	{
 		err = set_optarg(argc, argv, current_arg, &current_index);
