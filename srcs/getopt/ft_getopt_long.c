@@ -6,14 +6,14 @@
 /*   By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 22:49:07 by tliangso          #+#    #+#             */
-/*   Updated: 2024/02/27 03:37:19 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/02/27 21:01:41 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "ft_getopt.h"
 
-static int write_err(char *prog_name, char *message, char current_arg)
+static int	write_err(char *prog_name, char *message, char current_arg)
 {
 	write(STDERR_FILENO, prog_name, ft_strlen(prog_name));
 	write(STDERR_FILENO, message, ft_strlen(message));
@@ -22,7 +22,7 @@ static int write_err(char *prog_name, char *message, char current_arg)
 	return ('?');
 }
 
-static int write_err_long(char *prog_name, char *message, char *longname)
+static int	write_err_long(char *prog_name, char *message, char *longname)
 {
 	write(STDERR_FILENO, prog_name, ft_strlen(prog_name));
 	write(STDERR_FILENO, message, ft_strlen(message));
@@ -31,7 +31,7 @@ static int write_err_long(char *prog_name, char *message, char *longname)
 	return ('?');
 }
 
-static int write_err_arg(const char *prog_name, const char *name)
+static int	write_err_arg(const char *prog_name, const char *name)
 {
 	write(STDERR_FILENO, prog_name, ft_strlen(prog_name));
 	write(STDERR_FILENO, ": option '--", 12);
@@ -40,13 +40,14 @@ static int write_err_arg(const char *prog_name, const char *name)
 	return ('?');
 }
 
-int ft_getopt_long(int argc, char *const argv[], const char *optstring,
-				   const t_option *longopts, int *longindex)
+int	ft_getopt_long(int argc, char *const argv[], const char *optstring, \
+	const t_option *longopts, int *longindex)
 {
-	int opt;
-	static int current_index = 1;
-	const t_option *longopt;
-	const char *opt_ptr;
+
+	int				opt;
+	static int		current_index = 1;
+	const t_option	*longopt;
+	const char		*opt_ptr;
 
 	g_optarg = NULL;
 
@@ -134,9 +135,11 @@ int main(int argc, char *argv[])
 			printf("Usage: %s [OPTIONS]\n", argv[0]);
 			printf("Options:\n");
 			printf("  -h, --help\t\tDisplay this help message\n");
-			printf("  -v, --version\t\tDisplay version information\n");
-			printf("  -o, --output=FILE\tSpecify output file\n");
-			printf("  -i, --input=FILE\tSpecify input file\n");
+			printf("  -l, --version\t\tDisplay version information\n");
+			printf("  -R, --output=FILE\tSpecify output file\n");
+			printf("  -a, --input=FILE\tSpecify input file\n");
+			printf("  -r, --input=FILE\tSpecify input file\n");
+			printf("  -t, --input=FILE\tSpecify input file\n");
 			return 0;
 		case 'v':
 			printf("Version 1.0\n");

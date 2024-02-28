@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 10:16:47 by tliangso          #+#    #+#             */
-/*   Updated: 2024/02/17 14:12:17 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/02/28 08:59:43 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <limits.h>
+# include <stdbool.h>
 
 # include "get_next_line.h"
 # include "ft_printf.h"
@@ -90,4 +91,8 @@ void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
 // Extra Functions
+void	ft_lstsort(t_list **lst, int (*cmp)());
+int		ft_strcmp(const char *s1, const char *s2);
+char	*ft_strncpy(char *dst, const char *src, size_t len);
+
 #endif

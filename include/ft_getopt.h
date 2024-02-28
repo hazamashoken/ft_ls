@@ -6,7 +6,7 @@
 /*   By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:09:35 by tliangso          #+#    #+#             */
-/*   Updated: 2024/02/27 03:36:14 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/02/27 16:19:37 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,11 @@ int		g_optind;
 # define NO_ARG 0
 # define REQUIRED_ARG 1
 # define OPTIONAL_ARG 2
+
+# define no_argument 0
+# define required_argument 1
+# define optional_argument 2
+
 
 /**
  *

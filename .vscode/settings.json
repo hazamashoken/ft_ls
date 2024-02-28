@@ -3,6 +3,15 @@
         "get_next_line.h": "c",
         "stdlib.h": "c",
         "getopt.h": "c",
-        "ft_getopt.h": "c"
+        "ft_getopt.h": "c",
+        "ft_ls.h": "c",
+        "libft.h": "c",
+        "stdbool.h": "c",
+        "stdio.h": "c",
+        "types.h": "c",
+        "dirent.h": "c",
+        "time.h": "c",
+        "stat.h": "c",
+        "grp.h": "c"
     }
 }

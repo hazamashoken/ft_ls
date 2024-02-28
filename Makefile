@@ -2,19 +2,21 @@ DIR = srcs/
 
 BUILD = build/
 
-SRC = main.c
+SRC = main.c \
+	date.c \
 
 SRCS = ${addprefix ${DIR}, ${SRC}}
 
 OBJS = ${SRCS:.c=.o}
 
-INCLUDE = -I include
+INCLUDE = -I include -I lib/include
 
 LIB = -L lib/libft/ -lft
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror $(INCLUDE)
-
+CFLAGS := -Wall -Wextra -Werror
+CFLAGS += -fsanitize=address -g
+CFLAGS += $(INCLUDE)
 NAME = ft_ls
 
 
@@ -30,11 +32,11 @@ lib:
 
 clean:
 	make -C lib/libft/ clean
-
-	rm -f $(NAME)
+	rm -f $(OBJS)
 
 fclean: clean
 	make -C lib/libft/ fclean
+	rm -f $(NAME)
 
 
 

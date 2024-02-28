@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tliangso <earth78203@gmail.com>            +#+  +:+       +#+         #
+#    By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/09 10:06:54 by tliangso          #+#    #+#              #
-#    Updated: 2022/09/13 23:27:46 by tliangso         ###   ########.fr        #
+#    Updated: 2024/02/28 10:51:39 by tliangso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,10 @@ BONUS	=	ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
 			ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c \
 			ft_lstmap.c
 
-EXTRA	=	get_next_line.c get_next_line_utils.c ft_printf.c
+EXTRA	=	get_next_line.c get_next_line_utils.c ft_printf.c \
+	ft_lstsort.c \
+	ft_strcmp.c \
+	ft_strncpy.c \
 
 SRCS	= ${addprefix ${DIRSRC}, ${SRC}}
 
@@ -37,7 +40,7 @@ BONUS_OBJS = ${BONUS_SRCS:.c=.o}
 
 EXRTA_OBJS = ${EXTRA_SRCS:.c=.o}
 
-HEAD	= .
+HEAD	= ../include
 
 NAME	= libft.a
 
