@@ -14,6 +14,7 @@
         "stat.h": "c",
         "grp.h": "c",
         "chrono": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "ht.h": "c"
     }
 }

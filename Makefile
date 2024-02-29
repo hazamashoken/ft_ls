@@ -4,6 +4,9 @@ BUILD = build/
 
 SRC = main.c \
 	date.c \
+	ht/ht.c \
+	
+	
 
 SRCS = ${addprefix ${DIR}, ${SRC}}
 
@@ -15,7 +18,7 @@ LIB = -L lib/libft/ -lft
 
 CC = cc
 CFLAGS := -Wall -Wextra -Werror
-# CFLAGS += -fsanitize=address -g
+CFLAGS += -fsanitize=address -g
 CFLAGS += $(INCLUDE)
 NAME = ft_ls
 

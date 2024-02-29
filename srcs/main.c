@@ -1,6 +1,7 @@
 #include "libft.h"
 #include "ft_getopt.h"
 #include "ft_ls.h"
+#include "ht.h"
 
 // static t_option const long_options[] =
 // 	{
@@ -11,6 +12,8 @@
 // 		{"reverse", no_argument, NULL, 'r'},
 // 		{"almost-all", no_argument, NULL, 'A'},
 // 		{NULL, 0, NULL, 0}};
+
+static t_ht *g_file_table;
 
 t_entry *get_file_stat(const char *filename)
 {
@@ -181,20 +184,28 @@ int is_hidden_but_not_current_or_parent(const char *name)
 	return 0;
 }
 
-void listFilesRecursively(const char *base_path) {
+void listFilesRecursively(const char *base_path)
+{
 	char path[1024];
 	struct dirent *dirent;
 	struct stat statbuf;
 	t_list *entry_lst = NULL;
+	t_list *head = NULL;
 	size_t stblock_total = 0;
 
 	t_entry *entry;
 
+	if (ht_get(g_file_table, base_path))
+		return ;
+
+
 	DIR *dir = opendir(base_path);
-	if (!dir) {
+	if (!dir)
+	{
 		perror(base_path);
 		return;
 	}
+	ht_set(g_file_table, base_path, ft_strdup(base_path));
 	while ((dirent = readdir(dir)) != NULL)
 	{
 		t_stat statbuf;
@@ -221,106 +232,55 @@ void listFilesRecursively(const char *base_path) {
 	ft_printf("\n%s:\n", base_path);
 	ft_printf("total %d\n", stblock_total);
 	print_dir(entry_lst);
-	while (entry_lst)
+	head = entry_lst;
+	while (head)
 	{
-		entry = entry_lst->content;
-		if (is_current_or_parent(dirent->d_name) == 1 \
-		|| is_hidden_but_not_current_or_parent(dirent->d_name) == 1)
+		entry = head->content;
+		if (is_current_or_parent(getbasename(entry->name)) == 1 \
+		|| is_hidden_but_not_current_or_parent(getbasename(entry->name)) == 1)
+		{
+			head = head->next;
 			continue;
+		}
 
 		ft_bzero(path, 1024);
 		ft_strlcpy(path, (char *)base_path, 1024);
 		ft_strlcat(path, "/", 1024);
 		ft_strlcat(path, entry->name, 1024);
 
-		if (lstat(path, &statbuf) == -1) {
+		if (lstat(path, &statbuf) == -1)
+		{
 			perror(path);
+			head = head->next;
 			continue;
 		}
-
-		if (S_ISDIR(statbuf.st_mode)) {
+			
+		if (S_ISDIR(statbuf.st_mode))
+		{
 			listFilesRecursively(path);
 		}
-		entry_lst = entry_lst->next;
+		head = head->next;
 	}
 	ft_lstclear(&entry_lst, free);
 }
 
-// void recursively_do_shit(const char *base_path)
-// {
-// 	char path[1024];
-// 	t_list *entry_lst = NULL;
-// 	size_t stblock_total = 0;
-// 	DIR *fd = opendir(base_path);
-// 	t_entry *entry;
-
-// 	if (!fd)
-// 	{
-// 		perror(base_path);
-// 		return;
-// 	}
-
-// 	struct dirent *dir = readdir(fd);
-// 	ft_printf("\n%s:\n", base_path);
-// 	while (dir)
-// 	{
-// 		t_stat statbuf;
-// 		t_entry *file;
-// 		ft_bzero(path, 1024);
-// 		ft_strlcpy(path, (char *)base_path, 1024);
-// 		if (is_current_or_parent(path) == 0)
-// 		{
-// 			ft_strlcat(path, "/", 1024);
-// 			ft_strlcat(path, dir->d_name, 1024);
-// 		}
-// 		if (lstat(path, &statbuf) == -1)
-// 		{
-// 			perror(path);
-// 			return;
-// 		}
-// 		file = get_file_stat(path);
-// 		printf("%s\n", path);
-// 		printf("%s\n", getbasename(path));
-// 		if (is_current_or_parent(getbasename(path)) == 0)
-// 		{
-// 			stblock_total += statbuf.st_blocks / 2;
-// 			ft_lstadd_back(&entry_lst, ft_lstnew(file));
-// 		}
-// 		dir = readdir(fd);
-// 	}
-// 	closedir(fd);
-// 	ft_lstsort(&entry_lst, sort_by_lowername);
-// 	// ft_lstsort(&files, sort_by_mtime);
-
-// 	ft_printf("total %d\n", stblock_total);
-// 	print_dir(entry_lst);
-// 	while (entry_lst)
-// 	{
-// 		entry = entry_lst->content;
-// 		if (is_current_or_parent(getbasename(entry->name)) == 0 && S_ISDIR(entry->mode))
-// 		{
-
-// 			ft_bzero(path, 1024);
-// 			ft_strlcpy(path, (char *)base_path, 1024);
-// 			ft_strlcat(path, "/", 1024);
-// 			ft_strlcat(path, entry->name, 1024);
-// 			printf("path:%s\n", path);
-// 			recursively_do_shit(path);
-// 		}
-// 		entry_lst = entry_lst->next;
-// 	}
-// 	ft_lstclear(&entry_lst, free);
-// }
-
 int main(int argc, char *argv[])
 {
 	(void)argc;
+	g_file_table = ht_create();
 
 	if (argv[1] == NULL)
 		listFilesRecursively(".");
 	else
 		listFilesRecursively(argv[1]);
 
-	// print the stat
+	// DEBUG remove later
+	t_hti it = ht_iterator(g_file_table); 
+	while (ht_next(&it))
+	{
+		ft_printf("dir: %s\n", it.value);
+	} 
+
+	ht_destory(g_file_table, free);
 	return 0;
 }
