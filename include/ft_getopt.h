@@ -6,7 +6,7 @@
 /*   By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:09:35 by tliangso          #+#    #+#             */
-/*   Updated: 2024/02/27 16:19:37 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/02/29 16:48:34 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_option {
 }			t_option;
 
 int	ft_getopt(int argc, char *const argv[], const char *optstring);
-
+int	ft_getopt_long(int argc, char *const argv[], const char *optstring, \
+	const t_option *longopts, int *longindex);
 
 #endif

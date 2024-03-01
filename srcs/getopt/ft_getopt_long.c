@@ -6,7 +6,7 @@
 /*   By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 22:49:07 by tliangso          #+#    #+#             */
-/*   Updated: 2024/02/27 21:01:41 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/02/29 16:39:46 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,47 +116,47 @@ int	ft_getopt_long(int argc, char *const argv[], const char *optstring, \
 	return (-1);
 }
 
-int main(int argc, char *argv[])
-{
-	int opt;
-	// int longindex = -1;
-	const t_option longopts[] = {
-		{"help", NO_ARG, NULL, 'h'},
-		{"version", NO_ARG, NULL, 'v'},
-		{"output", REQUIRED_ARG, NULL, 'o'},
-		{"input", REQUIRED_ARG, NULL, 'i'},
-		{NULL, 0, NULL, 0}};
+// int main(int argc, char *argv[])
+// {
+// 	int opt;
+// 	// int longindex = -1;
+// 	const t_option longopts[] = {
+// 		{"help", NO_ARG, NULL, 'h'},
+// 		{"version", NO_ARG, NULL, 'v'},
+// 		{"output", REQUIRED_ARG, NULL, 'o'},
+// 		{"input", REQUIRED_ARG, NULL, 'i'},
+// 		{NULL, 0, NULL, 0}};
 
-	while ((opt = ft_getopt_long(argc, argv, "ho:i:v", longopts, NULL)) != -1)
-	{
-		switch (opt)
-		{
-		case 'h':
-			printf("Usage: %s [OPTIONS]\n", argv[0]);
-			printf("Options:\n");
-			printf("  -h, --help\t\tDisplay this help message\n");
-			printf("  -l, --version\t\tDisplay version information\n");
-			printf("  -R, --output=FILE\tSpecify output file\n");
-			printf("  -a, --input=FILE\tSpecify input file\n");
-			printf("  -r, --input=FILE\tSpecify input file\n");
-			printf("  -t, --input=FILE\tSpecify input file\n");
-			return 0;
-		case 'v':
-			printf("Version 1.0\n");
-			return 0;
-		case 'o':
-			printf("Output file: %s\n", g_optarg);
-			break;
-		case 'i':
-			printf("input file: %s\n", g_optarg);
-			break;
-		case '?':
-			return 1;
-		default:
-			printf("Unknown option\n");
-			return 1;
-		}
-	}
+// 	while ((opt = ft_getopt_long(argc, argv, "ho:i:v", longopts, NULL)) != -1)
+// 	{
+// 		switch (opt)
+// 		{
+// 		case 'h':
+// 			printf("Usage: %s [OPTIONS]\n", argv[0]);
+// 			printf("Options:\n");
+// 			printf("  -h, --help\t\tDisplay this help message\n");
+// 			printf("  -l, --version\t\tDisplay version information\n");
+// 			printf("  -R, --output=FILE\tSpecify output file\n");
+// 			printf("  -a, --input=FILE\tSpecify input file\n");
+// 			printf("  -r, --input=FILE\tSpecify input file\n");
+// 			printf("  -t, --input=FILE\tSpecify input file\n");
+// 			return 0;
+// 		case 'v':
+// 			printf("Version 1.0\n");
+// 			return 0;
+// 		case 'o':
+// 			printf("Output file: %s\n", g_optarg);
+// 			break;
+// 		case 'i':
+// 			printf("input file: %s\n", g_optarg);
+// 			break;
+// 		case '?':
+// 			return 1;
+// 		default:
+// 			printf("Unknown option\n");
+// 			return 1;
+// 		}
+// 	}
 
-	return opt;
-}
+// 	return opt;
+// }

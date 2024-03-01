@@ -1,38 +1,5 @@
 #include "ht.h"
 
-t_ht* ht_create(void)
-{
-	t_ht * table = malloc(sizeof(t_ht));
-	if (table == NULL)
-		return (NULL);
-	table->size = 0;
-	table->capacity = HT_INITIAL_CAPACITY;
-
-	table->entries = ft_calloc(table->capacity, sizeof(t_ht_entry));
-	if (table->entries == NULL)
-	{
-		free(table);
-		return (NULL);
-	}
-	return (table);
-}
-
-void    ht_destory(t_ht* table, void free_value(void *))
-{
-	size_t i;
-
-	i = 0;
-
-	while (i < table->capacity)
-	{
-		free((void *)table->entries[i].key);
-		free_value(table->entries[i].value);
-		++i;
-	}
-	free(table->entries);
-	free(table);
-}
-
 static uint64_t hash_key(const char* key)
 {
 	uint64_t hash;
@@ -145,37 +112,7 @@ const char* ht_set(t_ht *table, const char * key, void* value)
 	return ht_set_entry(table->entries, table->capacity, key, value, &table->size);
 }
 
-size_t ht_length(t_ht* table)
-{
-	return (table->size);
-}
 
-t_hti ht_iterator(t_ht* table)
-{
-	t_hti it;
-	it._table = table;
-	it._index = 0;
 
-	return (it);
-}
 
-bool ht_next(t_hti* it)
-{
-	t_ht* table;
-	size_t i;
 
-	table = it->_table;
-	while (it->_index < table->capacity)
-	{
-		i = it->_index;
-		it->_index++;
-		if (table->entries[i].key != NULL)
-		{
-			t_ht_entry entry = table->entries[i];
-			it->key = entry.key;
-			it->value = entry.value;
-			return true;
-		}	
-	}
-	return false;
-}
