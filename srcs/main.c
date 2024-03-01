@@ -228,7 +228,7 @@ void listFilesRecursively(const char *base_path)
 		ft_lstadd_back(&entry_lst, ft_lstnew(file));
 	}
 	closedir(dir);
-	ft_lstsort(&entry_lst, sort_by_lowername);
+	// ft_lstsort(&entry_lst, sort_by_lowername);
 	ft_printf("\n%s:\n", base_path);
 	ft_printf("total %d\n", stblock_total);
 	print_dir(entry_lst);
@@ -243,21 +243,21 @@ void listFilesRecursively(const char *base_path)
 			continue;
 		}
 
-		ft_bzero(path, 1024);
-		ft_strlcpy(path, (char *)base_path, 1024);
-		ft_strlcat(path, "/", 1024);
-		ft_strlcat(path, entry->name, 1024);
-
-		if (lstat(path, &statbuf) == -1)
+		// ft_bzero(path, 1024);
+		// ft_strlcpy(path, (char *)base_path, 1024);
+		// ft_strlcat(path, "/", 1024);
+		// ft_strlcat(path, entry->name, 1024);
+		// printf("path: %s\n", path);
+		if (lstat(entry->name, &statbuf) == -1)
 		{
-			perror(path);
+			perror(entry->name);
 			head = head->next;
 			continue;
 		}
 			
 		if (S_ISDIR(statbuf.st_mode))
 		{
-			listFilesRecursively(path);
+			listFilesRecursively(entry->name);
 		}
 		head = head->next;
 	}
@@ -275,11 +275,11 @@ int main(int argc, char *argv[])
 		listFilesRecursively(argv[1]);
 
 	// DEBUG remove later
-	t_hti it = ht_iterator(g_file_table); 
-	while (ht_next(&it))
-	{
-		ft_printf("dir: %s\n", it.value);
-	} 
+	// t_hti it = ht_iterator(g_file_table); 
+	// while (ht_next(&it))
+	// {
+	// 	ft_printf("dir: %s\n", it.value);
+	// } 
 
 	ht_destory(g_file_table, free);
 	return 0;
