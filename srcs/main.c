@@ -1,5 +1,5 @@
 #include "libft.h"
-#include "ft_getopt.h"
+// #include "ft_getopt.h"
 #include "ft_ls.h"
 #include "ht.h"
 
@@ -254,7 +254,7 @@ void listFilesRecursively(const char *base_path)
 			head = head->next;
 			continue;
 		}
-			
+
 		if (S_ISDIR(statbuf.st_mode))
 		{
 			listFilesRecursively(entry->name);
@@ -275,11 +275,11 @@ int main(int argc, char *argv[])
 		listFilesRecursively(argv[1]);
 
 	// DEBUG remove later
-	// t_hti it = ht_iterator(g_file_table); 
+	// t_hti it = ht_iterator(g_file_table);
 	// while (ht_next(&it))
 	// {
 	// 	ft_printf("dir: %s\n", it.value);
-	// } 
+	// }
 
 	ht_destory(g_file_table, free);
 	return 0;
