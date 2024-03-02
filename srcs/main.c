@@ -1,17 +1,8 @@
 #include "libft.h"
-// #include "ft_getopt.h"
+#include "ft_getopt.h"
 #include "ft_ls.h"
 #include "ht.h"
 
-// static t_option const long_options[] =
-// 	{
-// 		{"all", no_argument, NULL, 'a'},
-// 		{"directory", no_argument, NULL, 'd'},
-// 		{"human-readable", no_argument, NULL, 'h'},
-// 		{"no-group", no_argument, NULL, 'G'},
-// 		{"reverse", no_argument, NULL, 'r'},
-// 		{"almost-all", no_argument, NULL, 'A'},
-// 		{NULL, 0, NULL, 0}};
 
 static t_ht *g_file_table;
 
@@ -49,40 +40,34 @@ t_entry *get_file_stat(const char *filename)
 int print_file_type(mode_t mode)
 {
 	if (S_ISREG(mode))
-		ft_printf("-");
+		write(1, "-", 1);
 	else if (S_ISDIR(mode))
-		ft_printf("d");
+		write(1, "d", 1);
 	else if (S_ISCHR(mode))
-		ft_printf("c");
+		write(1, "c", 1);
 	else if (S_ISBLK(mode))
-		ft_printf("b");
+		write(1, "b", 1);
 	else if (S_ISFIFO(mode))
-		ft_printf("p");
+		write(1, "p", 1);
 	else if (S_ISLNK(mode))
-		ft_printf("l");
+		write(1, "l", 1);
 	else if (S_ISSOCK(mode))
-		ft_printf("s");
+		write(1, "s", 1);
 	else
-		ft_printf("?");
+		write(1, "?", 1);
 	return 0;
 }
 
 int print_perm_bit(mode_t mode)
 {
+	char permissions[] = {'x', 'w', 'r'};
 	int i;
 	for (i = 8; i >= 0; i--)
 	{
 		if (mode & (1 << i))
-		{
-			if (i % 3 == 2)
-				ft_printf("r");
-			else if (i % 3 == 1)
-				ft_printf("w");
-			else
-				ft_printf("x");
-		}
+			write(STDOUT_FILENO, &permissions[i % 3], 1);
 		else
-			ft_printf("-");
+			write(STDOUT_FILENO, "-", 1);
 	}
 	return 0;
 }
@@ -103,7 +88,10 @@ int print_user_group_other(uid_t uid, gid_t gid)
 		perror("getpwuid");
 		return 1;
 	}
-	ft_printf(" %s %s", pwd->pw_name, grp->gr_name);
+	write(STDOUT_FILENO, " ", 1);
+	write(STDOUT_FILENO, pwd->pw_name, ft_strlen(pwd->pw_name));
+	write(STDOUT_FILENO, " ", 1);
+	write(STDOUT_FILENO, grp->gr_name, ft_strlen(grp->gr_name));
 	return 0;
 }
 
@@ -147,7 +135,7 @@ char *getbasename(char *path)
 
 void print_file_info(t_entry *file)
 {
-	ft_printf("%d ", file->stat.st_blocks);
+	ft_printf("%d ", file->stat.st_blocks / 2);
 	print_file_type(file->mode);
 	print_perm_bit(file->mode);
 	ft_printf(" %d", file->nlink);
@@ -164,7 +152,8 @@ void print_dir(t_list *files)
 	while (files)
 	{
 		file = files->content;
-		if (ft_strncmp(file->name, ".", 2) != 0 && ft_strncmp(file->name, "..", 3) != 0)
+		if (ft_strncmp(file->name, ".", 2) != 0 \
+		&& ft_strncmp(file->name, "..", 3) != 0)
 			print_file_info(file);
 		files = files->next;
 	}
@@ -179,14 +168,15 @@ int is_current_or_parent(const char *name)
 
 int is_hidden_but_not_current_or_parent(const char *name)
 {
-	if (name[0] == '.' && ft_strncmp(name, ".", 2) != 0 && ft_strncmp(name, "..", 3) != 0)
+	if (name[0] == '.' && ft_strncmp(name, ".", 2) != 0 \
+	&& ft_strncmp(name, "..", 3) != 0)
 		return 1;
 	return 0;
 }
 
 void listFilesRecursively(const char *base_path)
 {
-	char path[1024];
+	char path[PATH_MAX];
 	struct dirent *dirent;
 	struct stat statbuf;
 	t_list *entry_lst = NULL;
@@ -210,8 +200,8 @@ void listFilesRecursively(const char *base_path)
 	{
 		t_stat statbuf;
 		t_entry *file;
-		if (is_current_or_parent(dirent->d_name) == 1 \
-		|| is_hidden_but_not_current_or_parent(dirent->d_name) == 1)
+		if (is_current_or_parent(dirent->d_name) == 1 )
+		// || is_hidden_but_not_current_or_parent(dirent->d_name) == 0)
 			continue;
 
 		ft_bzero(path, 1024);
@@ -236,8 +226,8 @@ void listFilesRecursively(const char *base_path)
 	while (head)
 	{
 		entry = head->content;
-		if (is_current_or_parent(getbasename(entry->name)) == 1 \
-		|| is_hidden_but_not_current_or_parent(getbasename(entry->name)) == 1)
+		if (is_current_or_parent(getbasename(entry->name)) == 1 )
+		// || is_hidden_but_not_current_or_parent(getbasename(entry->name)) == 1)
 		{
 			head = head->next;
 			continue;
@@ -264,9 +254,59 @@ void listFilesRecursively(const char *base_path)
 	ft_lstclear(&entry_lst, free);
 }
 
+int parse_options(int argc, char *argv[])
+{
+	t_option const long_options[] = {
+		{"all", no_argument, NULL, 'a'},
+		{"directory", no_argument, NULL, 'd'},
+		{"human-readable", no_argument, NULL, 'h'},
+		{"no-group", no_argument, NULL, 'G'},
+		{"reverse", no_argument, NULL, 'r'},
+		{"almost-all", no_argument, NULL, 'A'},
+		{NULL, 0, NULL, 0}};
+
+	int opt;
+	while ((opt = ft_getopt_long(argc, argv, "adhrAG", long_options, NULL)) != -1)
+	{
+		switch (opt)
+		{
+		case 'a':
+			ft_printf("option -a\n");
+			break;
+		case 'd':
+			ft_printf("option -d\n");
+			break;
+		case 'h':
+			ft_printf("option -h\n");
+			break;
+		case 'G':
+			ft_printf("option -G\n");
+			break;
+		case 'r':
+			ft_printf("option -r\n");
+			break;
+		case 'A':
+			ft_printf("option -A\n");
+			break;
+		case '?':
+			ft_printf("Try `%s --help' for more information.\n", argv[0]);
+			return 1;
+		default:
+			ft_printf("Error WTF: %s ??\n", opt);
+			return 1;
+		}
+	}
+	return 0;
+}
+
 int main(int argc, char *argv[])
 {
 	(void)argc;
+
+	if(parse_options(argc, argv))
+		return (1);
+
+
 	g_file_table = ht_create();
 
 	if (argv[1] == NULL)

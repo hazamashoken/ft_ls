@@ -6,7 +6,7 @@
 #    By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/09 10:06:54 by tliangso          #+#    #+#              #
-#    Updated: 2024/02/28 10:51:39 by tliangso         ###   ########.fr        #
+#    Updated: 2024/03/02 01:47:54 by tliangso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ CC		= cc
 
 RM		= rm -f
 
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror -O3
 
 .c.o:
 			${CC} ${CFLAGS} -c -I ${HEAD} $< -o ${<:.c=.o}

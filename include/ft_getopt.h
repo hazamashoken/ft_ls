@@ -6,7 +6,7 @@
 /*   By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:09:35 by tliangso          #+#    #+#             */
-/*   Updated: 2024/02/29 16:48:34 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/03/01 21:19:35 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 # define FT_GETOPT_H
 
 // Global variable to store argument of current option
-char	*g_optarg;
+extern char	*g_optarg;
 // Global variable to store the index of the next argument to be processed
-int		g_optind;
+extern int	g_optind;
 
 # define NO_ARG 0
 # define REQUIRED_ARG 1

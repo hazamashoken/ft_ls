@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 14:10:18 by tliangso          #+#    #+#             */
-/*   Updated: 2024/02/17 15:30:00 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/03/02 01:41:10 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	ft_print_str(char *str, char c, int mode)
 	int	len;
 
 	len = -1;
-	if (!str)
+	if (!mode && !str)
 		return (write(STDOUT_FILENO, "(null)", 6));
 	if (mode)
 		return (write(STDOUT_FILENO, &c, 1));

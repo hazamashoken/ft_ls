@@ -6,7 +6,7 @@
 /*   By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 21:13:02 by tliangso          #+#    #+#             */
-/*   Updated: 2024/02/28 09:05:45 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/03/02 01:51:37 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <grp.h>
 # include <pwd.h>
 # include <stdbool.h>
+# include <linux/limits.h>
 
 # define SECONDS_PER_DAY (24 * 60 * 60)
 # define MONTHS_PER_YEAR 12
@@ -68,7 +69,7 @@ enum e_filetype
 typedef struct s_entry
 {
 	// file name
-	char	name[256];
+	char	name[NAME_MAX];
 	// symbolic link name
 	char	*linkname;
 	// absolute path name for hyperlink

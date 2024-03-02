@@ -15,6 +15,7 @@
         "grp.h": "c",
         "chrono": "c",
         "typeinfo": "c",
-        "ht.h": "c"
+        "ht.h": "c",
+        "limits.h": "c"
     }
 }

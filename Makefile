@@ -25,7 +25,8 @@ LIB = -L lib/libft/ -lft
 
 CC = cc
 CFLAGS := -Wall -Wextra -Werror
-CFLAGS += -fsanitize=address -g
+CFLAGS += -O3
+# CFLAGS += -fsanitize=address -g
 CFLAGS += $(INCLUDE)
 NAME = ft_ls
 

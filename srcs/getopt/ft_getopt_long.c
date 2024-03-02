@@ -6,12 +6,13 @@
 /*   By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 22:49:07 by tliangso          #+#    #+#             */
-/*   Updated: 2024/02/29 16:39:46 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/03/01 21:19:47 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "ft_getopt.h"
+
 
 static int	write_err(char *prog_name, char *message, char current_arg)
 {
