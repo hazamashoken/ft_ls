@@ -6,7 +6,7 @@
 #    By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/09 10:06:54 by tliangso          #+#    #+#              #
-#    Updated: 2024/03/02 10:37:13 by tliangso         ###   ########.fr        #
+#    Updated: 2024/03/02 10:56:37 by tliangso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,8 @@ NAME	= libft.a
 
 HEAD	= include
 
-GNL_DIR = gnl/
-PRINTF_DIR = printf/
-LIBFT_DIR = libft/
+DIR = srcs
+
 
 
 LIBFT_SRC		=	ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
@@ -46,21 +45,38 @@ PRINTF_SRC = ft_align.c \
 			 ft_u_type_utils.c \
 			 ft_utils.c
 
+HASHTABLE_SRC = ht_set_get.c \
+				ht_create.c \
+				ht_iterator.c \
+				ht_length.c \
+				ht_next.c \
+				ht_destory.c \
+
+GETOPT_SRC = 	ft_getopt_long.c \
+				ft_getopt.c \
+
 EXTRA_SRC	= 	ft_lstsort.c \
 	ft_strcmp.c \
 	ft_strncpy.c \
 
 
-LIBFT_SRCS = ${addprefix ${LIBFT_DIR}, ${LIBFT_SRC}}
-GNL_SRCS = ${addprefix ${GNL_DIR}, ${GNL_SRC}}
-PRINTF_SRCS = ${addprefix ${PRINTF_DIR}, ${PRINTF_SRC}}
-EXTRA_SRCS = ${addprefix ${LIBFT_DIR}, ${EXTRA_SRC}}
+LIBFT_SRCS = ${addprefix ${DIR}/libft/, ${LIBFT_SRC}}
+GNL_SRCS = ${addprefix ${DIR}/gnl/, ${GNL_SRC}}
+PRINTF_SRCS = ${addprefix ${DIR}/printf/, ${PRINTF_SRC}}
+EXTRA_SRCS = ${addprefix ${DIR}/libft/, ${EXTRA_SRC}}
+HASHTABLE_SRCS = ${addprefix ${DIR}/ht/, ${HASHTABLE_SRC}}
+GETOPT_SRCS = ${addprefix ${DIR}/getopt/, ${GETOPT_SRC}}
 
-SRCS	= ${LIBFT_SRCS} ${GNL_SRCS} ${PRINTF_SRCS} ${EXTRA_SRCS}
+
+SRCS	= ${LIBFT_SRCS} \
+		${GNL_SRCS} \
+		${PRINTF_SRCS} \
+		${EXTRA_SRCS} \
+		${HASHTABLE_SRCS} \
+		${GETOPT_SRCS} \
+		
 
 OBJS	= ${SRCS:.c=.o}
-
-
 
 CC		= cc
 

@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_getopt_long.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 22:49:07 by tliangso          #+#    #+#             */
-/*   Updated: 2024/03/01 21:19:47 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/03/02 10:59:11 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "ft_getopt.h"
 
 

@@ -6,12 +6,14 @@
 /*   By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:09:35 by tliangso          #+#    #+#             */
-/*   Updated: 2024/03/02 10:37:01 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/03/02 10:59:07 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_GETOPT_H
 # define FT_GETOPT_H
+
+#include "libft.h"
 
 // Global variable to store argument of current option
 extern char	*g_optarg;

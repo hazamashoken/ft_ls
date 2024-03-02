@@ -3,15 +3,8 @@ DIR = srcs/
 BUILD = build/
 
 SRC = main.c \
-	date.c \
-	ht/ht_set_get.c \
-	ht/ht_create.c \
-	ht/ht_iterator.c \
-	ht/ht_length.c \
-	ht/ht_next.c \
-	ht/ht_destory.c \
-	getopt/ft_getopt_long.c \
-	getopt/ft_getopt.c \
+	date.c
+
 
 
 

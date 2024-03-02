@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_printf_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/19 20:32:17 by tliangso          #+#    #+#             */
-/*   Updated: 2024/02/17 14:14:05 by tliangso         ###   ########.fr       */
+/*   Created: 2023/09/10 23:35:22 by tliangso          #+#    #+#             */
+/*   Updated: 2024/03/02 10:40:47 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "ft_printf.h"
 
-# include <stddef.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <limits.h>
-# include <sys/resource.h>
+int	ft_istype(char c)
+{
+	size_t	i;
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
-# endif
-
-char	*get_next_line(int fd);
-char	*ft_strjoin_free(char *s1, char *s2);
-
-#endif
+	i = 0;
+	while (FORMAT[i])
+	{
+		if (FORMAT[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
+}

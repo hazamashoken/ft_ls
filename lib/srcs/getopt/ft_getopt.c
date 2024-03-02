@@ -6,11 +6,10 @@
 /*   By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:05:47 by tliangso          #+#    #+#             */
-/*   Updated: 2024/03/02 10:37:31 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/03/02 10:59:13 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "ft_getopt.h"
 
 char *g_optarg = NULL;
