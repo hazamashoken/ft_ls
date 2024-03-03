@@ -6,7 +6,7 @@
 /*   By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 21:13:02 by tliangso          #+#    #+#             */
-/*   Updated: 2024/03/03 18:39:00 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/03/04 00:43:57 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,31 +25,34 @@
 # define SECONDS_PER_DAY (24 * 60 * 60)
 # define MONTHS_PER_YEAR 12
 
-/*
-The struct stat is a data structure commonly used in Unix-like systems, including Linux, to store detailed information about a file. It's typically used by system calls like stat(), fstat(), and lstat() to retrieve various file attributes. Here's a breakdown of what struct stat contains:
+# define HYPERLINK(path) ft_printf("\e]8;;%s\e\\%s\e]8;;\e\\\n", path, getbasename(path));
 
-File Properties:
+# define HELP "\
+Usage: ft_ls [OPTION]... [FILE]...\n\
+List information about the FILEs (the current directory by default).\n\
+Sort entries alphabetically if none of -cftuvSUX nor --sort is specified.\n\
+\n\
+Mandatory arguments to long options are mandatory for short options too.\n\
+	-a, --all             do not ignore entries starting with .\n\
+	-A, --almost-all      do not list implied . and ..\n\
+	-d, --directory       list directories themselves, not their contents\n\
+	-f                    list all entries in directory order\n\
+	-g                    like -l, but do not list owner\n\
+	-G, --no-group        in a long listing, don't print group names\n\
+	-l                    use a long listing format\n\
+	-r, --reverse         reverse order while sorting\n\
+	-R, --recursive       list subdirectories recursively\n\
+	-t                    sort by modification time, newest first\n\
+	-u                    with -lt: sort by, and show, access time, newest first\n\
+	-1                    list one file per line\n\
+	  --help        display this help and exit\n\
+\n\
+Exit status:\n\
+ 0  if OK,\n\
+ 1  if minor problems (e.g., cannot access subdirectory),\n\
+ 2  if serious trouble (e.g., cannot access command-line argument)\
+"
 
-	Device IDs:
-		st_dev: Device ID of the device containing the file.
-		st_rdev: Device ID (relevant for character and block special devices).
-	File Identification:
-		st_ino: Unique file serial number (inode).
-		st_nlink: Number of hard links to the file.
-	Ownership:
-		st_uid: User ID of the file owner.
-		st_gid: Group ID of the group owning the file.
-	Permissions:
-		st_mode: File type and access permissions (e.g., regular file, directory, permissions for owner, group, and others).
-	Sizes:
-		st_size: Size of the file in bytes (relevant for regular files).
-		st_blksize: Optimal block size for I/O operations on the file system.
-	Timestamps:
-		st_atime: Last access time (may not reflect the most recent access).
-		st_mtime: Last modification time.
-		st_ctime: Last change time (e.g., metadata change).
-
-*/
 typedef struct stat t_stat;
 
 enum e_filetype
@@ -64,6 +67,10 @@ enum e_filetype
 	sock,
 	whiteout,
 	arg_directory
+};
+
+enum e_long_options {
+	O_HELP =  200
 };
 
 typedef struct s_entry
@@ -107,18 +114,31 @@ typedef struct s_entry
 
 typedef struct s_ls_option
 {
-	// mandatory
-	bool l;
-	bool R;
-	bool a;
-	bool r;
-	bool t;
-	// bonus
-	bool u;
-	bool f;
-	bool g;
-	bool d;
-	bool A;
+	char ignore_mode;
+	
+	char sort_opt;
+	char format_opt;
+
+	char quoting_style_opt;
+	char indicator_style;
+	char time_type;
+	char numeric_ids;
+	char directories_first;
+	
+	char immediate_dirs;
+	
+	char print_with_color;
+	char print_hyperlink;
+	char print_block_size;
+	char print_owner;
+	char print_inode;
+	char print_group;
+	char print_author;
+
+	char width_opt;
+
+	char eolbyte;
+	
 }	t_ls_option;
 
 void		display_date(struct stat file_stat);

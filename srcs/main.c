@@ -2,10 +2,11 @@
 #include "ft_getopt.h"
 #include "ft_ls.h"
 #include "ht.h"
+#include "ft_extra.h"
 
 
 static t_ht *g_file_table;
-static t_ls_option g_ls_option;
+// static t_ls_option g_ls_option;
 
 t_entry *get_file_stat(const char *filename)
 {
@@ -126,13 +127,7 @@ int sort_by_mtime(t_entry *a, t_entry *b)
 	return a->stat.st_mtime < b->stat.st_mtime;
 }
 
-char *getbasename(char *path)
-{
-	char *base = ft_strrchr(path, '/');
-	if (base == NULL)
-		return (char *)path;
-	return base + 1;
-}
+
 
 void print_file_info(t_entry *file)
 {
@@ -143,7 +138,7 @@ void print_file_info(t_entry *file)
 	print_user_group_other(file->uid, file->gid);
 	ft_printf(" %d ", file->size);
 	display_date(file->stat);
-	ft_printf(" %s", getbasename(file->name));
+	ft_printf(" %s", ft_basename(file->name));
 	ft_printf("\n");
 }
 
@@ -227,8 +222,8 @@ void listFilesRecursively(const char *base_path)
 	while (head)
 	{
 		entry = head->content;
-		if (is_current_or_parent(getbasename(entry->name)) == 1 )
-		// || is_hidden_but_not_current_or_parent(getbasename(entry->name)) == 1)
+		if (is_current_or_parent(ft_basename(entry->name)) == 1 )
+		// || is_hidden_but_not_current_or_parent(ft_basename(entry->name)) == 1)
 		{
 			head = head->next;
 			continue;
@@ -254,19 +249,12 @@ void listFilesRecursively(const char *base_path)
 	}
 	ft_lstclear(&entry_lst, free);
 }
-
-void	init_option(t_ls_option *option)
+static void usage (int status, char *program_name)
 {
-	option->l = false;
-	option->R = false;
-	option->a = false;
-	option->r = false;
-	option->t = false;
-	option->u = false;
-	option->f = false;
-	option->g = false;
-	option->d = false;
-	option->A = false;
+	if (status != EXIT_SUCCESS)
+		ft_printf("Try `%s --help' for more information.\n", program_name);
+	else
+		ft_printf("%s\n", HELP);
 }
 
 int parse_options(int argc, char *argv[])
@@ -274,71 +262,34 @@ int parse_options(int argc, char *argv[])
 	t_option const long_options[] = {
 		{"all", no_argument, NULL, 'a'},
 		{"directory", no_argument, NULL, 'd'},
+		{"almost-all", no_argument, NULL, 'A'},
 		{"no-group", no_argument, NULL, 'G'},
 		{"reverse", no_argument, NULL, 'r'},
-		{"almost-all", no_argument, NULL, 'A'},
-		{"help", no_argument, NULL, 200},
+		{"recursive", no_argument, NULL, 'R'},
+		{"help", no_argument, NULL, O_HELP},
 		{NULL, 0, NULL, 0}};
 
 	int opt;
-	init_option(&g_ls_option);
-	while ((opt = ft_getopt_long(argc, argv, "lRartufgdAG", long_options, NULL)) != -1)
+	// init_option(&g_ls_option);
+	while ((opt = ft_getopt_long(argc, argv, "aAdfgGlrRtu1", long_options, NULL)) != -1)
 	{
 		switch (opt)
 		{
-		case 'l':
-			ft_printf("option -ln");
-			g_ls_option.a = true;
-			break;
-		case 'R':
-			ft_printf("option -R\n");
-			g_ls_option.d = true;
-			break;
-		case 'a':
-			ft_printf("option -a\n");
-			g_ls_option.a = true;
-			break;
-		case 'r':
-			ft_printf("option -r\n");
-			g_ls_option.r = true;
-			break;
-		case 't':
-			ft_printf("option -t\n");
-			g_ls_option.t = true;
-			break;
-		case 'u':
-			ft_printf("option -u\n");
-			g_ls_option.u = true;
-			break;
-		case 'f':
-			ft_printf("option -f\n");
-			g_ls_option.f = true;
-			break;
-		case 'g':
-			ft_printf("option -g\n");
-			g_ls_option.g = true;
-			break;
-		case 'd':
-			ft_printf("option -d\n");
-			g_ls_option.d = true;
-			break;
-		case 'A':
-			ft_printf("option -A\n");
-			g_ls_option.A = true;
-			break;
 		case '?':
 			ft_printf("Try `%s --help' for more information.\n", argv[0]);
 			exit (2);
-		case 200:
-			ft_printf("option --help\n");
+		case O_HELP:
+			ft_printf("%s\n", HELP);
 			exit (0);
 		default:
-			ft_printf("Error WTF: %d ??\n", opt);
-			exit (2);
+			usage(2, argv[0]);
+			exit(2);
 		}
 	}
 	return 0;
 }
+
+
 
 
 int main(int argc, char *argv[])
@@ -346,19 +297,6 @@ int main(int argc, char *argv[])
 	(void)argc;
 
 	parse_options(argc, argv);
-
-	printf("l: %d\n", g_ls_option.l);
-	printf("R: %d\n", g_ls_option.R);
-	printf("a: %d\n", g_ls_option.a);
-	printf("r: %d\n", g_ls_option.r);
-	printf("t: %d\n", g_ls_option.t);
-	printf("u: %d\n", g_ls_option.u);
-	printf("f: %d\n", g_ls_option.f);
-	printf("g: %d\n", g_ls_option.g);
-	printf("d: %d\n", g_ls_option.d);
-	printf("A: %d\n", g_ls_option.A);
-
-
 
 
 	g_file_table = ht_create();

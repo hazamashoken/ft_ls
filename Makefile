@@ -1,59 +1,69 @@
-DIR := srcs/
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/03/03 23:06:04 by tliangso          #+#    #+#              #
+#    Updated: 2024/03/03 23:06:05 by tliangso         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-BUILD_DIR := build/
-
-SRC := main.c \
-	date.c
-
-
-
-
-SRCS := ${addprefix ${DIR}, ${SRC}}
-
-OBJS := ${SRCS:.c=.o}
+NAME = ft_ls
 
 INCLUDE := -I include -I lib/include
+
+
+DIR := ./srcs
+BUILD_DIR := ./build
+
+LIB_NAME := libft.a
 
 LIB := -L lib -lft
 
 CC := cc
+RM	:= rm -rf
+
+
+SRC := main.c \
+	date.c
+
 CFLAGS := -Wall -Wextra -Werror
-CFLAGS += -MMD
+CFLAGS += -MMD -MP
 
 CFLAGS += $(INCLUDE)
 # CFLAGS += -O3
 CFLAGS += -fsanitize=address -g
 
-NAME = ft_ls
-
+# DO NOT CHANGE
+SRCS := ${addprefix ${DIR}/, ${SRC}}
+OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 DEPS := $(OBJS:.o=.d)
 
--include $(DEPS)
-
-
-all: lib $(NAME)
+all: $(BUILD_DIR)/$(NAME)
 
 $(BUILD_DIR)/%.c.o: %.c
 	mkdir -p $(dir $@)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
-$(BUILD_DIR)/$(NAME): $(OBJS)
+$(BUILD_DIR)/$(NAME): $(OBJS) $(LIB_NAME)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIB)
 
-lib:
-	make -C lib all
-
+$(LIB_NAME):
+	${MAKE} -C lib all
 
 clean:
-	make -C lib clean
-	rm -f $(OBJS) $(DEPS)
+	${MAKE} -C lib clean
+	${RM} $(BUILD_DIR)
 
 fclean: clean
-	make -C lib fclean
-	rm -f $(NAME)
-
+	${MAKE} -C lib fclean
+	${RM} $(NAME)
 
 
 re: fclean all
 
 .PHONY: all clean fclean re lib
+
+-include $(DEPS)

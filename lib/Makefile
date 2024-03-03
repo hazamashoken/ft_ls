@@ -6,18 +6,20 @@
 #    By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/09 10:06:54 by tliangso          #+#    #+#              #
-#    Updated: 2024/03/03 22:27:53 by tliangso         ###   ########.fr        #
+#    Updated: 2024/03/04 00:23:47 by tliangso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 NAME	= libft.a
 
-HEAD	= include
+INC_DIR	= include
 
-DIR = srcs
+CC		= cc
+RM		= rm -rf
 
-
+DIR = ./srcs
+BUILD_DIR := ./build
 
 LIBFT_SRC		=	ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
 			ft_strlen.c ft_memset.c ft_bzero.c ft_memcpy.c ft_memmove.c ft_strlcpy.c \
@@ -57,12 +59,13 @@ GETOPT_SRC = 	ft_getopt.c \
 EXTRA_SRC	= 	ft_lstsort.c \
 	ft_strcmp.c \
 	ft_strncpy.c \
+	ft_basename.c \
 
 
 LIBFT_SRCS = ${addprefix ${DIR}/libft/, ${LIBFT_SRC}}
 GNL_SRCS = ${addprefix ${DIR}/gnl/, ${GNL_SRC}}
 PRINTF_SRCS = ${addprefix ${DIR}/printf/, ${PRINTF_SRC}}
-EXTRA_SRCS = ${addprefix ${DIR}/libft/, ${EXTRA_SRC}}
+EXTRA_SRCS = ${addprefix ${DIR}/extra/, ${EXTRA_SRC}}
 HASHTABLE_SRCS = ${addprefix ${DIR}/ht/, ${HASHTABLE_SRC}}
 GETOPT_SRCS = ${addprefix ${DIR}/getopt/, ${GETOPT_SRC}}
 
@@ -75,27 +78,29 @@ SRCS	= ${LIBFT_SRCS} \
 		${GETOPT_SRCS} \
 		
 
-OBJS	= ${SRCS:.c=.o}
+OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 
-CC		= cc
 
-RM		= rm -f
+CFLAGS	= -Wall -Wextra -Werror
+CFLAGS += -MMD -MP 
+# CFLAGS  += -fsanitize=address -g
+CFLAGS  += -O3
+CFLAGS  += -I $(INC_DIR)
 
-CFLAGS	= -Wall -Wextra -Werror 
-CFLAGS  += -fsanitize=address -g
-# CFLAGS  += -O3
-
-.c.o:
-			${CC} ${CFLAGS} -c -I ${HEAD} $< -o ${<:.c=.o}
+DEPS := $(OBJS:.o=.d)
 
 all:		${NAME}
 
+$(BUILD_DIR)/%.c.o: %.c
+	mkdir -p $(dir $@)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
 ${NAME}:	${OBJS}
-			ar rc ${NAME} ${OBJS}
+			${AR} rc ${NAME} ${OBJS}
 			ranlib ${NAME}
 
 clean:
-			${RM} ${OBJS}
+			${RM} ${BUILD_DIR}
 
 fclean:		clean
 			${RM} ${NAME}
@@ -103,3 +108,5 @@ fclean:		clean
 re:			fclean	all
 
 .PHONY:		all	clean	fclean	re
+
+-include $(DEPS)

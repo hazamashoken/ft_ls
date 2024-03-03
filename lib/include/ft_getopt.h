@@ -6,7 +6,7 @@
 /*   By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 16:09:35 by tliangso          #+#    #+#             */
-/*   Updated: 2024/03/03 20:21:41 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/03/03 23:29:37 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,6 @@
 extern char	*g_optarg;
 // Global variable to store the index of the next argument to be processed
 extern int	g_optind;
-
-extern int	g_opterr;
-
-// Global variable to store the option character that caused an error
-extern int	g_optopt;
 
 # define NO_ARG 0
 # define REQUIRED_ARG 1
