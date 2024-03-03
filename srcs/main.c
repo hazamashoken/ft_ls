@@ -5,6 +5,7 @@
 
 
 static t_ht *g_file_table;
+static t_ls_option g_ls_option;
 
 t_entry *get_file_stat(const char *filename)
 {
@@ -254,57 +255,110 @@ void listFilesRecursively(const char *base_path)
 	ft_lstclear(&entry_lst, free);
 }
 
+void	init_option(t_ls_option *option)
+{
+	option->l = false;
+	option->R = false;
+	option->a = false;
+	option->r = false;
+	option->t = false;
+	option->u = false;
+	option->f = false;
+	option->g = false;
+	option->d = false;
+	option->A = false;
+}
+
 int parse_options(int argc, char *argv[])
 {
 	t_option const long_options[] = {
 		{"all", no_argument, NULL, 'a'},
 		{"directory", no_argument, NULL, 'd'},
-		{"human-readable", no_argument, NULL, 'h'},
 		{"no-group", no_argument, NULL, 'G'},
 		{"reverse", no_argument, NULL, 'r'},
 		{"almost-all", no_argument, NULL, 'A'},
+		{"help", no_argument, NULL, 200},
 		{NULL, 0, NULL, 0}};
 
 	int opt;
-	while ((opt = ft_getopt_long(argc, argv, "adhrAG", long_options, NULL)) != -1)
+	init_option(&g_ls_option);
+	while ((opt = ft_getopt_long(argc, argv, "lRartufgdAG", long_options, NULL)) != -1)
 	{
 		switch (opt)
 		{
+		case 'l':
+			ft_printf("option -ln");
+			g_ls_option.a = true;
+			break;
+		case 'R':
+			ft_printf("option -R\n");
+			g_ls_option.d = true;
+			break;
 		case 'a':
 			ft_printf("option -a\n");
-			break;
-		case 'd':
-			ft_printf("option -d\n");
-			break;
-		case 'h':
-			ft_printf("option -h\n");
-			break;
-		case 'G':
-			ft_printf("option -G\n");
+			g_ls_option.a = true;
 			break;
 		case 'r':
 			ft_printf("option -r\n");
+			g_ls_option.r = true;
+			break;
+		case 't':
+			ft_printf("option -t\n");
+			g_ls_option.t = true;
+			break;
+		case 'u':
+			ft_printf("option -u\n");
+			g_ls_option.u = true;
+			break;
+		case 'f':
+			ft_printf("option -f\n");
+			g_ls_option.f = true;
+			break;
+		case 'g':
+			ft_printf("option -g\n");
+			g_ls_option.g = true;
+			break;
+		case 'd':
+			ft_printf("option -d\n");
+			g_ls_option.d = true;
 			break;
 		case 'A':
 			ft_printf("option -A\n");
+			g_ls_option.A = true;
 			break;
 		case '?':
 			ft_printf("Try `%s --help' for more information.\n", argv[0]);
-			return 1;
+			exit (2);
+		case 200:
+			ft_printf("option --help\n");
+			exit (0);
 		default:
-			ft_printf("Error WTF: %s ??\n", opt);
-			return 1;
+			ft_printf("Error WTF: %d ??\n", opt);
+			exit (2);
 		}
 	}
 	return 0;
 }
 
+
 int main(int argc, char *argv[])
 {
 	(void)argc;
 
-	if(parse_options(argc, argv))
-		return (1);
+	parse_options(argc, argv);
+
+	printf("l: %d\n", g_ls_option.l);
+	printf("R: %d\n", g_ls_option.R);
+	printf("a: %d\n", g_ls_option.a);
+	printf("r: %d\n", g_ls_option.r);
+	printf("t: %d\n", g_ls_option.t);
+	printf("u: %d\n", g_ls_option.u);
+	printf("f: %d\n", g_ls_option.f);
+	printf("g: %d\n", g_ls_option.g);
+	printf("d: %d\n", g_ls_option.d);
+	printf("A: %d\n", g_ls_option.A);
+
+
 
 
 	g_file_table = ht_create();

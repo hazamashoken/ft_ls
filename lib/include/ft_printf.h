@@ -6,7 +6,7 @@
 /*   By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 02:43:35 by tliangso          #+#    #+#             */
-/*   Updated: 2024/03/02 10:25:15 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/03/03 21:15:18 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,12 @@ typedef struct s_format
 	int		space;
 	int		hash;
 	char	type;
+	int		fd;
 }	t_format;
 
 //printf.c
 int		ft_printf(const char *format, ...);
+int		ft_dprintf(int fd, const char *format, ...);
 
 //ft_printf_utils.c
 int		ft_istype(char c);
@@ -84,7 +86,7 @@ char	*pcs_digit_operation(char *str, t_format *fmt);
 //printer.c
 int		print_str(char *cstr, t_format *fmt);
 int		printf_empty(char *str, t_format *fmt);
-int		print_char(char *str, int w);
+int		print_char(int fd, char *str, int w);
 
 //align.c
 char	*align_left(char *str, t_format *fmt);

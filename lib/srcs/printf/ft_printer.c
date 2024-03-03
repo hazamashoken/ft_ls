@@ -6,13 +6,13 @@
 /*   By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 23:35:04 by tliangso          #+#    #+#             */
-/*   Updated: 2024/03/02 10:25:15 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:51:05 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	print_char(char *str, int w)
+int	print_char(int fd, char *str, int w)
 {
 	int		i;
 
@@ -21,7 +21,7 @@ int	print_char(char *str, int w)
 		w = 1;
 	while (i < w)
 	{
-		write(1, &str[i], 1);
+		write(fd, &str[i], 1);
 		i++;
 	}
 	return (i);
@@ -33,13 +33,13 @@ int	printf_empty(char *str, t_format *fmt)
 
 	n = 0;
 	if (str == 0 && fmt->width)
-		n = print_char(" ", 1);
+		n = print_char(fmt->fd, " ", 1);
 	else if (str == 0)
-		n = print_char("(null)", 6);
+		n = print_char(fmt->fd, "(null)", 6);
 	else if (ft_strlen(str) > 0 && fmt->width > 0)
 	{
 		while (n++ < fmt->width)
-			ft_putchar_fd(' ', 1);
+			ft_putchar_fd(' ', fmt->fd);
 		n--;
 	}
 	return (n);
@@ -53,8 +53,8 @@ int	print_str(char *str, t_format *fmt)
 		return (printf_empty(str, fmt));
 	n = ft_strlen(str);
 	if (fmt->width > 0 && n == 0)
-		n = print_char(str, fmt->width);
+		n = print_char(fmt->fd, str, fmt->width);
 	else
-		ft_putstr_fd(str, 1);
+		ft_putstr_fd(str, fmt->fd);
 	return (n);
 }

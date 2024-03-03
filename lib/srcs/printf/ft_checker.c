@@ -6,7 +6,7 @@
 /*   By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 23:33:58 by tliangso          #+#    #+#             */
-/*   Updated: 2024/03/02 10:25:15 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/03/03 21:44:59 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	print_format(t_format *fmt)
 		str = width_checker(str, fmt);
 	}
 	if (fmt->type == 'c')
-		fmt->total_len += print_char(str, fmt->width);
+		fmt->total_len += print_char(fmt->fd, str, fmt->width);
 	else if (fmt->type == 's' && !str)
 		fmt->total_len += printf_empty(str, fmt);
 	else

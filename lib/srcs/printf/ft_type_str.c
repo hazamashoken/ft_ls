@@ -6,7 +6,7 @@
 /*   By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 23:35:36 by tliangso          #+#    #+#             */
-/*   Updated: 2024/03/02 10:25:15 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/03/03 22:29:27 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@ char	*s_type_str(char *s)
 {
 	char	*str;
 
+# if __linux
+	if (s == NULL)
+		return (ft_strdup("(null)"));
+# endif
 	str = ft_strdup(s);
 	if (str == NULL)
 		return (NULL);

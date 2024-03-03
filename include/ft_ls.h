@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ls.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 21:13:02 by tliangso          #+#    #+#             */
-/*   Updated: 2024/03/02 01:51:37 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:39:00 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,22 @@ typedef struct s_entry
 
 	struct s_entry *childern;
 }			t_entry;
+
+typedef struct s_ls_option
+{
+	// mandatory
+	bool l;
+	bool R;
+	bool a;
+	bool r;
+	bool t;
+	// bonus
+	bool u;
+	bool f;
+	bool g;
+	bool d;
+	bool A;
+}	t_ls_option;
 
 void		display_date(struct stat file_stat);
 

@@ -6,7 +6,7 @@
 /*   By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 23:34:23 by tliangso          #+#    #+#             */
-/*   Updated: 2024/03/02 10:25:15 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/03/03 22:29:22 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,10 @@ char	*get_hexaddr_str(size_t x, char format)
 	size_t	len;
 	char	*res2;
 
+#if __linux
+	if (x == 0)
+		return (ft_strdup("(nil)"));
+#endif
 	if (format == 'x')
 		hex = "0123456789abcdef";
 	else

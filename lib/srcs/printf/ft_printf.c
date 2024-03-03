@@ -6,7 +6,7 @@
 /*   By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 23:35:12 by tliangso          #+#    #+#             */
-/*   Updated: 2024/03/02 10:25:15 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/03/03 22:18:16 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,25 +106,56 @@ int	ft_printf(const char *format, ...)
 {
 	int			i;
 	int			ret;
-	t_format	*tab;
+	t_format	*fmt;
 
-	tab = (t_format *)ft_calloc(sizeof(t_format), 1);
-	if (!tab)
+	fmt = (t_format *)malloc(sizeof(t_format));
+	if (!fmt)
 		return (-1);
-	tab = reset_format(tab);
-	tab->total_len = 0;
-	va_start(tab->args, format);
+	fmt->fd = STDOUT_FILENO;
+	fmt = reset_format(fmt);
+	fmt->total_len = 0;
+	va_start(fmt->args, format);
 	i = -1;
 	ret = 0;
 	while (*(format + ++i))
 	{
 		if (*(format + i) == '%')
-			i += ft_eval_format(tab, format, i + 1);
+			i += ft_eval_format(fmt, format, i + 1);
 		else
 			ret += write(1, format + i, 1);
 	}
-	va_end(tab->args);
-	ret += tab->total_len;
-	free (tab);
+	va_end(fmt->args);
+	ret += fmt->total_len;
+	free (fmt);
+	return (ret);
+}
+
+int	ft_dprintf(int fd, const char *format, ...)
+{
+	int			i;
+	int			ret;
+	t_format	*fmt;
+
+	if (fd < 0)
+		return (-1);
+	fmt = (t_format *)malloc(sizeof(t_format));
+	if (!fmt)
+		return (-1);
+	fmt->fd = fd;
+	fmt = reset_format(fmt);
+	fmt->total_len = 0;
+	va_start(fmt->args, format);
+	i = -1;
+	ret = 0;
+	while (*(format + ++i))
+	{
+		if (*(format + i) == '%')
+			i += ft_eval_format(fmt, format, i + 1);
+		else
+			ret += write(fmt->fd, format + i, 1);
+	}
+	va_end(fmt->args);
+	ret += fmt->total_len;
+	free (fmt);
 	return (ret);
 }

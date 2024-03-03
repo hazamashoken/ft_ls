@@ -6,7 +6,7 @@
 #    By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/09 10:06:54 by tliangso          #+#    #+#              #
-#    Updated: 2024/03/02 10:56:37 by tliangso         ###   ########.fr        #
+#    Updated: 2024/03/03 22:27:53 by tliangso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,8 +52,7 @@ HASHTABLE_SRC = ht_set_get.c \
 				ht_next.c \
 				ht_destory.c \
 
-GETOPT_SRC = 	ft_getopt_long.c \
-				ft_getopt.c \
+GETOPT_SRC = 	ft_getopt.c \
 
 EXTRA_SRC	= 	ft_lstsort.c \
 	ft_strcmp.c \
@@ -82,7 +81,9 @@ CC		= cc
 
 RM		= rm -f
 
-CFLAGS	= -Wall -Wextra -Werror -O3
+CFLAGS	= -Wall -Wextra -Werror 
+CFLAGS  += -fsanitize=address -g
+# CFLAGS  += -O3
 
 .c.o:
 			${CC} ${CFLAGS} -c -I ${HEAD} $< -o ${<:.c=.o}

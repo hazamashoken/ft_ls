@@ -1,33 +1,43 @@
-DIR = srcs/
+DIR := srcs/
 
-BUILD = build/
+BUILD_DIR := build/
 
-SRC = main.c \
+SRC := main.c \
 	date.c
 
 
 
 
-SRCS = ${addprefix ${DIR}, ${SRC}}
+SRCS := ${addprefix ${DIR}, ${SRC}}
 
-OBJS = ${SRCS:.c=.o}
+OBJS := ${SRCS:.c=.o}
 
-INCLUDE = -I include -I lib/include
+INCLUDE := -I include -I lib/include
 
-LIB = -L lib -lft
+LIB := -L lib -lft
 
-CC = cc
+CC := cc
 CFLAGS := -Wall -Wextra -Werror
-CFLAGS += -O3
-# CFLAGS += -fsanitize=address -g
+CFLAGS += -MMD
+
 CFLAGS += $(INCLUDE)
+# CFLAGS += -O3
+CFLAGS += -fsanitize=address -g
+
 NAME = ft_ls
 
+DEPS := $(OBJS:.o=.d)
+
+-include $(DEPS)
 
 
 all: lib $(NAME)
 
-$(NAME): $(OBJS)
+$(BUILD_DIR)/%.c.o: %.c
+	mkdir -p $(dir $@)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/$(NAME): $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIB)
 
 lib:
@@ -36,7 +46,7 @@ lib:
 
 clean:
 	make -C lib clean
-	rm -f $(OBJS)
+	rm -f $(OBJS) $(DEPS)
 
 fclean: clean
 	make -C lib fclean
