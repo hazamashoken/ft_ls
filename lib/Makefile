@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+         #
+#    By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/09 10:06:54 by tliangso          #+#    #+#              #
-#    Updated: 2024/03/04 00:23:47 by tliangso         ###   ########.fr        #
+#    Updated: 2024/03/04 12:19:10 by tliangso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,13 +76,13 @@ SRCS	= ${LIBFT_SRCS} \
 		${EXTRA_SRCS} \
 		${HASHTABLE_SRCS} \
 		${GETOPT_SRCS} \
-		
+
 
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 
 
 CFLAGS	= -Wall -Wextra -Werror
-CFLAGS += -MMD -MP 
+CFLAGS += -MMD -MP
 # CFLAGS  += -fsanitize=address -g
 CFLAGS  += -O3
 CFLAGS  += -I $(INC_DIR)
@@ -98,6 +98,7 @@ $(BUILD_DIR)/%.c.o: %.c
 ${NAME}:	${OBJS}
 			${AR} rc ${NAME} ${OBJS}
 			ranlib ${NAME}
+			@echo -e "\033[32m$(NAME) compiled\033[0m"
 
 clean:
 			${RM} ${BUILD_DIR}

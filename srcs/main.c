@@ -278,6 +278,316 @@ int parse_options(int argc, char *argv[])
 		case '?':
 			ft_printf("Try `%s --help' for more information.\n", argv[0]);
 			exit (2);
+		case 'a':
+		  ignore_mode = IGNORE_MINIMAL;
+		  break;
+
+		case 'b':
+		  quoting_style_opt = escape_quoting_style;
+		  break;
+
+		case 'c':
+		  time_type = time_ctime;
+		  break;
+
+		case 'd':
+		  immediate_dirs = true;
+		  break;
+
+		case 'f':
+		  ignore_mode = IGNORE_MINIMAL; /* enable -a */
+		  sort_opt = sort_none;         /* enable -U */
+		  if (format_opt == long_format)
+			format_opt = -1;            /* disable -l */
+		  print_with_color = false;     /* disable --color */
+		  print_hyperlink = false;      /* disable --hyperlink */
+		  print_block_size = false;     /* disable -s */
+		  break;
+
+		case FILE_TYPE_INDICATOR_OPTION: /* --file-type */
+		  indicator_style = file_type;
+		  break;
+
+		case 'g':
+		  format_opt = long_format;
+		  print_owner = false;
+		  break;
+
+		case 'h':
+		  file_human_output_opts = human_output_opts =
+			human_autoscale | human_SI | human_base_1024;
+		  file_output_block_size = output_block_size = 1;
+		  break;
+
+		case 'i':
+		  print_inode = true;
+		  break;
+
+		case 'k':
+		  kibibytes_specified = true;
+		  break;
+
+		case 'l':
+		  format_opt = long_format;
+		  break;
+
+		case 'm':
+		  format_opt = with_commas;
+		  break;
+
+		case 'n':
+		  numeric_ids = true;
+		  format_opt = long_format;
+		  break;
+
+		case 'o':  /* Just like -l, but don't display group info.  */
+		  format_opt = long_format;
+		  print_group = false;
+		  break;
+
+		case 'p':
+		  indicator_style = slash;
+		  break;
+
+		case 'q':
+		  hide_control_chars_opt = true;
+		  break;
+
+		case 'r':
+		  sort_reverse = true;
+		  break;
+
+		case 's':
+		  print_block_size = true;
+		  break;
+
+		case 't':
+		  sort_opt = sort_time;
+		  break;
+
+		case 'u':
+		  time_type = time_atime;
+		  break;
+
+		case 'v':
+		  sort_opt = sort_version;
+		  break;
+
+		case 'w':
+		  width_opt = decode_line_length (optarg);
+		  if (width_opt < 0)
+			error (LS_FAILURE, 0, "%s: %s", _("invalid line width"),
+				   quote (optarg));
+		  break;
+
+		case 'x':
+		  format_opt = horizontal;
+		  break;
+
+		case 'A':
+		  ignore_mode = IGNORE_DOT_AND_DOTDOT;
+		  break;
+
+		case 'B':
+		  add_ignore_pattern ("*~");
+		  add_ignore_pattern (".*~");
+		  break;
+
+		case 'C':
+		  format_opt = many_per_line;
+		  break;
+
+		case 'D':
+		  format_opt = long_format;
+		  print_hyperlink = false;
+		  dired = true;
+		  break;
+
+		case 'F':
+		  {
+			int i;
+			if (optarg)
+			  i = XARGMATCH ("--classify", optarg, when_args, when_types);
+			else
+			  /* Using --classify with no argument is equivalent to using
+				 --classify=always.  */
+			  i = when_always;
+
+			if (i == when_always || (i == when_if_tty && stdout_isatty ()))
+			  indicator_style = classify;
+			break;
+		  }
+
+		case 'G':		/* inhibit display of group info */
+		  print_group = false;
+		  break;
+
+		case 'H':
+		  dereference = DEREF_COMMAND_LINE_ARGUMENTS;
+		  break;
+
+		case DEREFERENCE_COMMAND_LINE_SYMLINK_TO_DIR_OPTION:
+		  dereference = DEREF_COMMAND_LINE_SYMLINK_TO_DIR;
+		  break;
+
+		case 'I':
+		  add_ignore_pattern (optarg);
+		  break;
+
+		case 'L':
+		  dereference = DEREF_ALWAYS;
+		  break;
+
+		case 'N':
+		  quoting_style_opt = literal_quoting_style;
+		  break;
+
+		case 'Q':
+		  quoting_style_opt = c_quoting_style;
+		  break;
+
+		case 'R':
+		  recursive = true;
+		  break;
+
+		case 'S':
+		  sort_opt = sort_size;
+		  break;
+
+		case 'T':
+		  tabsize_opt = xnumtoumax (optarg, 0, 0, MIN (PTRDIFF_MAX, SIZE_MAX),
+									"", _("invalid tab size"), LS_FAILURE);
+		  break;
+
+		case 'U':
+		  sort_opt = sort_none;
+		  break;
+
+		case 'X':
+		  sort_opt = sort_extension;
+		  break;
+
+		case '1':
+		  /* -1 has no effect after -l.  */
+		  if (format_opt != long_format)
+			format_opt = one_per_line;
+		  break;
+
+		case AUTHOR_OPTION:
+		  print_author = true;
+		  break;
+
+		case HIDE_OPTION:
+		  {
+			struct ignore_pattern *hide = xmalloc (sizeof *hide);
+			hide->pattern = optarg;
+			hide->next = hide_patterns;
+			hide_patterns = hide;
+		  }
+		  break;
+
+		case SORT_OPTION:
+		  sort_opt = XARGMATCH ("--sort", optarg, sort_args, sort_types);
+		  break;
+
+		case GROUP_DIRECTORIES_FIRST_OPTION:
+		  directories_first = true;
+		  break;
+
+		case TIME_OPTION:
+		  time_type = XARGMATCH ("--time", optarg, time_args, time_types);
+		  break;
+
+		case FORMAT_OPTION:
+		  format_opt = XARGMATCH ("--format", optarg, format_args,
+								  format_types);
+		  break;
+
+		case FULL_TIME_OPTION:
+		  format_opt = long_format;
+		  time_style_option = "full-iso";
+		  break;
+
+		case COLOR_OPTION:
+		  {
+			int i;
+			if (optarg)
+			  i = XARGMATCH ("--color", optarg, when_args, when_types);
+			else
+			  /* Using --color with no argument is equivalent to using
+				 --color=always.  */
+			  i = when_always;
+
+			print_with_color = (i == when_always
+								|| (i == when_if_tty && stdout_isatty ()));
+			break;
+		  }
+
+		case HYPERLINK_OPTION:
+		  {
+			int i;
+			if (optarg)
+			  i = XARGMATCH ("--hyperlink", optarg, when_args, when_types);
+			else
+			  /* Using --hyperlink with no argument is equivalent to using
+				 --hyperlink=always.  */
+			  i = when_always;
+
+			print_hyperlink = (i == when_always
+							   || (i == when_if_tty && stdout_isatty ()));
+			break;
+		  }
+
+		case INDICATOR_STYLE_OPTION:
+		  indicator_style = XARGMATCH ("--indicator-style", optarg,
+									   indicator_style_args,
+									   indicator_style_types);
+		  break;
+
+		case QUOTING_STYLE_OPTION:
+		  quoting_style_opt = XARGMATCH ("--quoting-style", optarg,
+										 quoting_style_args,
+										 quoting_style_vals);
+		  break;
+
+		case TIME_STYLE_OPTION:
+		  time_style_option = optarg;
+		  break;
+
+		case SHOW_CONTROL_CHARS_OPTION:
+		  hide_control_chars_opt = false;
+		  break;
+
+		case BLOCK_SIZE_OPTION:
+		  {
+			enum strtol_error e = human_options (optarg, &human_output_opts,
+												 &output_block_size);
+			if (e != LONGINT_OK)
+			  xstrtol_fatal (e, oi, 0, long_options, optarg);
+			file_human_output_opts = human_output_opts;
+			file_output_block_size = output_block_size;
+		  }
+		  break;
+
+		case SI_OPTION:
+		  file_human_output_opts = human_output_opts =
+			human_autoscale | human_SI;
+		  file_output_block_size = output_block_size = 1;
+		  break;
+
+		case 'Z':
+		  print_scontext = true;
+		  break;
+
+		case ZERO_OPTION:
+		  eolbyte = 0;
+		  hide_control_chars_opt = false;
+		  if (format_opt != long_format)
+			format_opt = one_per_line;
+		  print_with_color = false;
+		  quoting_style_opt = literal_quoting_style;
+		  break;
+
 		case O_HELP:
 			ft_printf("%s\n", HELP);
 			exit (0);

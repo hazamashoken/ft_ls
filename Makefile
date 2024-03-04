@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+         #
+#    By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/03 23:06:04 by tliangso          #+#    #+#              #
-#    Updated: 2024/03/03 23:06:05 by tliangso         ###   ########.fr        #
+#    Updated: 2024/03/04 12:18:30 by tliangso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,7 @@ $(BUILD_DIR)/%.c.o: %.c
 
 $(BUILD_DIR)/$(NAME): $(OBJS) $(LIB_NAME)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIB)
+	@echo -e "\033[32m$(NAME) compiled\033[0m"
 
 $(LIB_NAME):
 	${MAKE} -C lib all
