@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_extra.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tliangso <tliangso@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 00:21:37 by tliangso          #+#    #+#             */
-/*   Updated: 2024/03/04 00:21:44 by tliangso         ###   ########.fr       */
+/*   Updated: 2024/03/05 00:21:00 by tliangso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,5 +16,6 @@
 # include "libft.h"
 
 char *ft_basename(const char *path);
-
+char *ft_quote_type(const char *str, const char type);
+char *ft_quote(const char *str);
 #endif

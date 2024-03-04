@@ -6,7 +6,7 @@
 #    By: tliangso <tliangso@student.42bangkok.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/09 10:06:54 by tliangso          #+#    #+#              #
-#    Updated: 2024/03/04 12:19:10 by tliangso         ###   ########.fr        #
+#    Updated: 2024/03/05 00:34:21 by tliangso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,10 +56,13 @@ HASHTABLE_SRC = ht_set_get.c \
 
 GETOPT_SRC = 	ft_getopt.c \
 
+ARGMATCH_SRC = 	ft_argmatch.c \
+
 EXTRA_SRC	= 	ft_lstsort.c \
 	ft_strcmp.c \
 	ft_strncpy.c \
 	ft_basename.c \
+	ft_quote.c \
 
 
 LIBFT_SRCS = ${addprefix ${DIR}/libft/, ${LIBFT_SRC}}
@@ -68,6 +71,7 @@ PRINTF_SRCS = ${addprefix ${DIR}/printf/, ${PRINTF_SRC}}
 EXTRA_SRCS = ${addprefix ${DIR}/extra/, ${EXTRA_SRC}}
 HASHTABLE_SRCS = ${addprefix ${DIR}/ht/, ${HASHTABLE_SRC}}
 GETOPT_SRCS = ${addprefix ${DIR}/getopt/, ${GETOPT_SRC}}
+ARGMATCH_SRCS = ${addprefix ${DIR}/argmatch/, ${ARGMATCH_SRC}}
 
 
 SRCS	= ${LIBFT_SRCS} \
@@ -76,6 +80,7 @@ SRCS	= ${LIBFT_SRCS} \
 		${EXTRA_SRCS} \
 		${HASHTABLE_SRCS} \
 		${GETOPT_SRCS} \
+		${ARGMATCH_SRCS}
 
 
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)

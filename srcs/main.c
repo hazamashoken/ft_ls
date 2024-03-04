@@ -3,10 +3,10 @@
 #include "ft_ls.h"
 #include "ht.h"
 #include "ft_extra.h"
-
+#include "ft_argmatch.h"
 
 static t_ht *g_file_table;
-// static t_ls_option g_ls_option;
+static t_ls_option g_ls_option;
 
 t_entry *get_file_stat(const char *filename)
 {
@@ -127,8 +127,6 @@ int sort_by_mtime(t_entry *a, t_entry *b)
 	return a->stat.st_mtime < b->stat.st_mtime;
 }
 
-
-
 void print_file_info(t_entry *file)
 {
 	ft_printf("%d ", file->stat.st_blocks / 2);
@@ -148,8 +146,7 @@ void print_dir(t_list *files)
 	while (files)
 	{
 		file = files->content;
-		if (ft_strncmp(file->name, ".", 2) != 0 \
-		&& ft_strncmp(file->name, "..", 3) != 0)
+		if (ft_strncmp(file->name, ".", 2) != 0 && ft_strncmp(file->name, "..", 3) != 0)
 			print_file_info(file);
 		files = files->next;
 	}
@@ -164,8 +161,7 @@ int is_current_or_parent(const char *name)
 
 int is_hidden_but_not_current_or_parent(const char *name)
 {
-	if (name[0] == '.' && ft_strncmp(name, ".", 2) != 0 \
-	&& ft_strncmp(name, "..", 3) != 0)
+	if (name[0] == '.' && ft_strncmp(name, ".", 2) != 0 && ft_strncmp(name, "..", 3) != 0)
 		return 1;
 	return 0;
 }
@@ -182,8 +178,7 @@ void listFilesRecursively(const char *base_path)
 	t_entry *entry;
 
 	if (ht_get(g_file_table, base_path))
-		return ;
-
+		return;
 
 	DIR *dir = opendir(base_path);
 	if (!dir)
@@ -196,8 +191,8 @@ void listFilesRecursively(const char *base_path)
 	{
 		t_stat statbuf;
 		t_entry *file;
-		if (is_current_or_parent(dirent->d_name) == 1 )
-		// || is_hidden_but_not_current_or_parent(dirent->d_name) == 0)
+		if (is_current_or_parent(dirent->d_name) == 1)
+			// || is_hidden_but_not_current_or_parent(dirent->d_name) == 0)
 			continue;
 
 		ft_bzero(path, 1024);
@@ -222,7 +217,7 @@ void listFilesRecursively(const char *base_path)
 	while (head)
 	{
 		entry = head->content;
-		if (is_current_or_parent(ft_basename(entry->name)) == 1 )
+		if (is_current_or_parent(ft_basename(entry->name)) == 1)
 		// || is_hidden_but_not_current_or_parent(ft_basename(entry->name)) == 1)
 		{
 			head = head->next;
@@ -249,7 +244,7 @@ void listFilesRecursively(const char *base_path)
 	}
 	ft_lstclear(&entry_lst, free);
 }
-static void usage (int status, char *program_name)
+static void usage(int status, char *program_name)
 {
 	if (status != EXIT_SUCCESS)
 		ft_printf("Try `%s --help' for more information.\n", program_name);
@@ -261,336 +256,281 @@ int parse_options(int argc, char *argv[])
 {
 	t_option const long_options[] = {
 		{"all", no_argument, NULL, 'a'},
+		{"escape", no_argument, NULL, 'b'},
 		{"directory", no_argument, NULL, 'd'},
-		{"almost-all", no_argument, NULL, 'A'},
+		// {"dired", no_argument, NULL, 'D'},
+		// {"full-time", no_argument, NULL, FULL_TIME_OPTION},
+		{"group-directories-first", no_argument, NULL,
+		 GROUP_DIRECTORIES_FIRST_OPTION},
+		// {"human-readable", no_argument, NULL, 'h'},
+		{"inode", no_argument, NULL, 'i'},
+		// {"kibibytes", no_argument, NULL, 'k'},
+		{"numeric-uid-gid", no_argument, NULL, 'n'},
 		{"no-group", no_argument, NULL, 'G'},
+		// {"hide-control-chars", no_argument, NULL, 'q'},
 		{"reverse", no_argument, NULL, 'r'},
+		{"size", no_argument, NULL, 's'},
+		{"width", required_argument, NULL, 'w'},
+		{"almost-all", no_argument, NULL, 'A'},
+		// {"ignore-backups", no_argument, NULL, 'B'},
+		{"classify", optional_argument, NULL, 'F'},
+		{"file-type", no_argument, NULL, FILE_TYPE_INDICATOR_OPTION},
+		// {"dereference-command-line", no_argument, NULL, 'H'},
+		// {"ignore", required_argument, NULL, 'I'},
+		// {"dereference", no_argument, NULL, 'L'},
+		{"literal", no_argument, NULL, 'N'},
+		{"quote-name", no_argument, NULL, 'Q'},
+		{"quoting-style", required_argument, NULL, QUOTING_STYLE_OPTION},
 		{"recursive", no_argument, NULL, 'R'},
-		{"help", no_argument, NULL, O_HELP},
+		{"format", required_argument, NULL, FORMAT_OPTION},
+		// {"show-control-chars", no_argument, NULL, SHOW_CONTROL_CHARS_OPTION},
+		// {"sort", required_argument, NULL, SORT_OPTION},
+		// {"tabsize", required_argument, NULL, 'T'},
+		// {"time", required_argument, NULL, TIME_OPTION},
+		// {"time-style", required_argument, NULL, TIME_STYLE_OPTION},
+		// {"zero", no_argument, NULL, ZERO_OPTION},
+		// {"color", optional_argument, NULL, COLOR_OPTION},
+		{"hyperlink", optional_argument, NULL, HYPERLINK_OPTION},
+		// {"block-size", required_argument, NULL, BLOCK_SIZE_OPTION},
+		// {"context", no_argument, 0, 'Z'},
+		{"author", no_argument, NULL, AUTHOR_OPTION},
+		{"help", no_argument, NULL, HELP_OPTION},
 		{NULL, 0, NULL, 0}};
 
 	int opt;
-	// init_option(&g_ls_option);
-	while ((opt = ft_getopt_long(argc, argv, "aAdfgGlrRtu1", long_options, NULL)) != -1)
+	// init_option(&g_ls_option);             abcdfghiklmnopqrstuvw:xABCDFGHI:LNQRST:UXZ1
+	while ((opt = ft_getopt_long(argc, argv, "abcdfgilmnoprstuvw:xACFGNQRSUX1", long_options, NULL)) != -1)
 	{
 		switch (opt)
 		{
 		case '?':
 			ft_printf("Try `%s --help' for more information.\n", argv[0]);
-			exit (2);
+			exit(2);
 		case 'a':
-		  ignore_mode = IGNORE_MINIMAL;
-		  break;
+			g_ls_option.ignore_mode = IGNORE_MINIMAL;
+			break;
 
 		case 'b':
-		  quoting_style_opt = escape_quoting_style;
-		  break;
+			g_ls_option.quoting_style_opt = escape_quoting_style;
+			break;
 
 		case 'c':
-		  time_type = time_ctime;
-		  break;
+			g_ls_option.time_type = time_ctime;
+			break;
 
 		case 'd':
-		  immediate_dirs = true;
-		  break;
+			g_ls_option.immediate_dirs = true;
+			break;
 
 		case 'f':
-		  ignore_mode = IGNORE_MINIMAL; /* enable -a */
-		  sort_opt = sort_none;         /* enable -U */
-		  if (format_opt == long_format)
-			format_opt = -1;            /* disable -l */
-		  print_with_color = false;     /* disable --color */
-		  print_hyperlink = false;      /* disable --hyperlink */
-		  print_block_size = false;     /* disable -s */
-		  break;
+			g_ls_option.ignore_mode = IGNORE_MINIMAL; /* enable -a */
+			g_ls_option.sort_opt = sort_none;		  /* enable -U */
+			if (g_ls_option.format_opt == long_format)
+				g_ls_option.format_opt = -1;	  /* disable -l */
+			g_ls_option.print_with_color = false; /* disable --color */
+			g_ls_option.print_hyperlink = false;  /* disable --hyperlink */
+			g_ls_option.print_block_size = false; /* disable -s */
+			break;
 
 		case FILE_TYPE_INDICATOR_OPTION: /* --file-type */
-		  indicator_style = file_type;
-		  break;
+			g_ls_option.indicator_style = file_type;
+			break;
 
 		case 'g':
-		  format_opt = long_format;
-		  print_owner = false;
-		  break;
-
-		case 'h':
-		  file_human_output_opts = human_output_opts =
-			human_autoscale | human_SI | human_base_1024;
-		  file_output_block_size = output_block_size = 1;
-		  break;
+			g_ls_option.format_opt = long_format;
+			g_ls_option.print_owner = false;
+			break;
 
 		case 'i':
-		  print_inode = true;
-		  break;
-
-		case 'k':
-		  kibibytes_specified = true;
-		  break;
+			g_ls_option.print_inode = true;
+			break;
 
 		case 'l':
-		  format_opt = long_format;
-		  break;
+			g_ls_option.format_opt = long_format;
+			break;
 
 		case 'm':
-		  format_opt = with_commas;
-		  break;
+			g_ls_option.format_opt = with_commas;
+			break;
 
 		case 'n':
-		  numeric_ids = true;
-		  format_opt = long_format;
-		  break;
+			g_ls_option.numeric_ids = true;
+			g_ls_option.format_opt = long_format;
+			break;
 
-		case 'o':  /* Just like -l, but don't display group info.  */
-		  format_opt = long_format;
-		  print_group = false;
-		  break;
+		case 'o': /* Just like -l, but don't display group info.  */
+			g_ls_option.format_opt = long_format;
+			g_ls_option.print_group = false;
+			break;
 
 		case 'p':
-		  indicator_style = slash;
-		  break;
-
-		case 'q':
-		  hide_control_chars_opt = true;
-		  break;
+			g_ls_option.indicator_style = slash;
+			break;
 
 		case 'r':
-		  sort_reverse = true;
-		  break;
+			g_ls_option.sort_reverse = true;
+			break;
 
 		case 's':
-		  print_block_size = true;
-		  break;
+			g_ls_option.print_block_size = true;
+			break;
 
 		case 't':
-		  sort_opt = sort_time;
-		  break;
+			g_ls_option.sort_opt = sort_time;
+			break;
 
 		case 'u':
-		  time_type = time_atime;
-		  break;
+			g_ls_option.time_type = time_atime;
+			break;
 
 		case 'v':
-		  sort_opt = sort_version;
-		  break;
+			g_ls_option.sort_opt = sort_version;
+			break;
 
 		case 'w':
-		  width_opt = decode_line_length (optarg);
-		  if (width_opt < 0)
-			error (LS_FAILURE, 0, "%s: %s", _("invalid line width"),
-				   quote (optarg));
-		  break;
+			// g_ls_option.width_opt = decode_line_length(g_optarg);
+			// if (g_ls_option.width_opt < 0)
+			// 	error(LS_FAILURE, 0, "%s: %s", "invalid line width",
+			// 		  quote(g_optarg));
+			break;
 
 		case 'x':
-		  format_opt = horizontal;
-		  break;
+			g_ls_option.format_opt = horizontal;
+			break;
 
 		case 'A':
-		  ignore_mode = IGNORE_DOT_AND_DOTDOT;
-		  break;
-
-		case 'B':
-		  add_ignore_pattern ("*~");
-		  add_ignore_pattern (".*~");
-		  break;
+			g_ls_option.ignore_mode = IGNORE_DOT_AND_DOTDOT;
+			break;
 
 		case 'C':
-		  format_opt = many_per_line;
-		  break;
-
-		case 'D':
-		  format_opt = long_format;
-		  print_hyperlink = false;
-		  dired = true;
-		  break;
+			g_ls_option.format_opt = many_per_line;
+			break;
 
 		case 'F':
-		  {
+		{
 			int i;
-			if (optarg)
-			  i = XARGMATCH ("--classify", optarg, when_args, when_types);
+			if (g_optarg)
+				i = XARGMATCH("--classify", g_optarg, when_args, when_types);
 			else
-			  /* Using --classify with no argument is equivalent to using
-				 --classify=always.  */
-			  i = when_always;
-
-			if (i == when_always || (i == when_if_tty && stdout_isatty ()))
-			  indicator_style = classify;
+				/* Using --classify with no argument is equivalent to using
+					--classify=always.  */
+				i = when_always;
+			if (i == when_always || (i == when_if_tty && isatty (STDOUT_FILENO)))
+				g_ls_option.indicator_style = classify;
 			break;
-		  }
+		}
 
-		case 'G':		/* inhibit display of group info */
-		  print_group = false;
-		  break;
-
-		case 'H':
-		  dereference = DEREF_COMMAND_LINE_ARGUMENTS;
-		  break;
-
-		case DEREFERENCE_COMMAND_LINE_SYMLINK_TO_DIR_OPTION:
-		  dereference = DEREF_COMMAND_LINE_SYMLINK_TO_DIR;
-		  break;
-
-		case 'I':
-		  add_ignore_pattern (optarg);
-		  break;
-
-		case 'L':
-		  dereference = DEREF_ALWAYS;
-		  break;
+		case 'G': /* inhibit display of group info */
+			g_ls_option.print_group = false;
+			break;
 
 		case 'N':
-		  quoting_style_opt = literal_quoting_style;
-		  break;
+			g_ls_option.quoting_style_opt = literal_quoting_style;
+			break;
 
 		case 'Q':
-		  quoting_style_opt = c_quoting_style;
-		  break;
+			g_ls_option.quoting_style_opt = c_quoting_style;
+			break;
 
 		case 'R':
-		  recursive = true;
-		  break;
+			g_ls_option.recursive = true;
+			break;
 
 		case 'S':
-		  sort_opt = sort_size;
-		  break;
-
-		case 'T':
-		  tabsize_opt = xnumtoumax (optarg, 0, 0, MIN (PTRDIFF_MAX, SIZE_MAX),
-									"", _("invalid tab size"), LS_FAILURE);
-		  break;
+			g_ls_option.sort_opt = sort_size;
+			break;
 
 		case 'U':
-		  sort_opt = sort_none;
-		  break;
+			g_ls_option.sort_opt = sort_none;
+			break;
 
 		case 'X':
-		  sort_opt = sort_extension;
-		  break;
+			g_ls_option.sort_opt = sort_extension;
+			break;
 
 		case '1':
-		  /* -1 has no effect after -l.  */
-		  if (format_opt != long_format)
-			format_opt = one_per_line;
-		  break;
+			/* -1 has no effect after -l.  */
+			if (g_ls_option.format_opt != long_format)
+				g_ls_option.format_opt = one_per_line;
+			break;
 
 		case AUTHOR_OPTION:
-		  print_author = true;
-		  break;
-
-		case HIDE_OPTION:
-		  {
-			struct ignore_pattern *hide = xmalloc (sizeof *hide);
-			hide->pattern = optarg;
-			hide->next = hide_patterns;
-			hide_patterns = hide;
-		  }
-		  break;
-
-		case SORT_OPTION:
-		  sort_opt = XARGMATCH ("--sort", optarg, sort_args, sort_types);
-		  break;
-
-		case GROUP_DIRECTORIES_FIRST_OPTION:
-		  directories_first = true;
-		  break;
-
-		case TIME_OPTION:
-		  time_type = XARGMATCH ("--time", optarg, time_args, time_types);
-		  break;
-
-		case FORMAT_OPTION:
-		  format_opt = XARGMATCH ("--format", optarg, format_args,
-								  format_types);
-		  break;
-
-		case FULL_TIME_OPTION:
-		  format_opt = long_format;
-		  time_style_option = "full-iso";
-		  break;
-
-		case COLOR_OPTION:
-		  {
-			int i;
-			if (optarg)
-			  i = XARGMATCH ("--color", optarg, when_args, when_types);
-			else
-			  /* Using --color with no argument is equivalent to using
-				 --color=always.  */
-			  i = when_always;
-
-			print_with_color = (i == when_always
-								|| (i == when_if_tty && stdout_isatty ()));
+			g_ls_option.print_author = true;
 			break;
-		  }
 
-		case HYPERLINK_OPTION:
-		  {
-			int i;
-			if (optarg)
-			  i = XARGMATCH ("--hyperlink", optarg, when_args, when_types);
-			else
-			  /* Using --hyperlink with no argument is equivalent to using
-				 --hyperlink=always.  */
-			  i = when_always;
+			// case HIDE_OPTION:
+			// {
+			// 	struct ignore_pattern *hide = xmalloc(sizeof *hide);
+			// 	hide->pattern = g_optarg;
+			// 	hide->next = hide_patterns;
+			// 	hide_patterns = hide;
+			// }
+			// break;
 
-			print_hyperlink = (i == when_always
-							   || (i == when_if_tty && stdout_isatty ()));
-			break;
-		  }
+			case SORT_OPTION:
+				g_ls_option.sort_opt = XARGMATCH("--sort", g_optarg, sort_args, sort_types);
+				break;
 
-		case INDICATOR_STYLE_OPTION:
-		  indicator_style = XARGMATCH ("--indicator-style", optarg,
-									   indicator_style_args,
-									   indicator_style_types);
-		  break;
+			case GROUP_DIRECTORIES_FIRST_OPTION:
+				g_ls_option.directories_first = true;
+				break;
 
-		case QUOTING_STYLE_OPTION:
-		  quoting_style_opt = XARGMATCH ("--quoting-style", optarg,
-										 quoting_style_args,
-										 quoting_style_vals);
-		  break;
+			case FORMAT_OPTION:
+				g_ls_option.format_opt = XARGMATCH("--format", g_optarg, format_args,
+												   format_types);
+				break;
 
-		case TIME_STYLE_OPTION:
-		  time_style_option = optarg;
-		  break;
+			// case COLOR_OPTION:
+			// {
+			// 	int i;
+			// 	if (optarg)
+			// 		i = XARGMATCH("--color", optarg, when_args, when_types);
+			// 	else
+			// 		/* Using --color with no argument is equivalent to using
+			// 			--color=always.  */
+			// 		i = when_always;
 
-		case SHOW_CONTROL_CHARS_OPTION:
-		  hide_control_chars_opt = false;
-		  break;
+			// 	g_ls_option.print_with_color = (i == when_always || (i == when_if_tty && stdout_isatty()));
+			// 	break;
+			// }
 
-		case BLOCK_SIZE_OPTION:
-		  {
-			enum strtol_error e = human_options (optarg, &human_output_opts,
-												 &output_block_size);
-			if (e != LONGINT_OK)
-			  xstrtol_fatal (e, oi, 0, long_options, optarg);
-			file_human_output_opts = human_output_opts;
-			file_output_block_size = output_block_size;
-		  }
-		  break;
+			// case HYPERLINK_OPTION:
+			// {
+			// 	int i;
+			// 	if (optarg)
+			// 		i = XARGMATCH("--hyperlink", g_optarg, when_args, when_types);
+			// 	else
+			// 		/* Using --hyperlink with no argument is equivalent to using
+			// 			--hyperlink=always.  */
+			// 		i = when_always;
 
-		case SI_OPTION:
-		  file_human_output_opts = human_output_opts =
-			human_autoscale | human_SI;
-		  file_output_block_size = output_block_size = 1;
-		  break;
+			// 	g_ls_option.print_hyperlink = (i == when_always || (i == when_if_tty && stdout_isatty()));
+			// 	break;
+			// }
 
-		case 'Z':
-		  print_scontext = true;
-		  break;
+			// case INDICATOR_STYLE_OPTION:
+			// 	g_ls_option.indicator_style = XARGMATCH("--indicator-style", g_optarg,
+			// 											indicator_style_args,
+			// 											indicator_style_types);
+			// 	break;
 
-		case ZERO_OPTION:
-		  eolbyte = 0;
-		  hide_control_chars_opt = false;
-		  if (format_opt != long_format)
-			format_opt = one_per_line;
-		  print_with_color = false;
-		  quoting_style_opt = literal_quoting_style;
-		  break;
+			case QUOTING_STYLE_OPTION:
+				g_ls_option.quoting_style_opt = XARGMATCH("--quoting-style", g_optarg,
+														  quoting_style_args,
+														  quoting_style_vals);
+				break;
 
-		case O_HELP:
+			// case TIME_STYLE_OPTION:
+			// 	g_ls_option.time_style_option = g_optarg;
+			// 	break;
+
+			// case SHOW_CONTROL_CHARS_OPTION:
+			// 	g_ls_option.hide_control_chars_opt = false;
+			// 	break;
+
+		case HELP_OPTION:
 			ft_printf("%s\n", HELP);
-			exit (0);
+			exit(0);
 		default:
 			usage(2, argv[0]);
 			exit(2);
@@ -599,15 +539,11 @@ int parse_options(int argc, char *argv[])
 	return 0;
 }
 
-
-
-
 int main(int argc, char *argv[])
 {
 	(void)argc;
 
 	parse_options(argc, argv);
-
 
 	g_file_table = ht_create();
 

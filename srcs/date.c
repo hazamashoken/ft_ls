@@ -1,5 +1,6 @@
 #include "libft.h"
-#include "ft_ls.h"
+#include <sys/stat.h>
+#include <time.h>
 
 static char		*display_year(char *long_time)
 {

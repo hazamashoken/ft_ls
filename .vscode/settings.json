@@ -17,6 +17,25 @@
         "typeinfo": "c",
         "ht.h": "c",
         "limits.h": "c",
-        "cstdlib": "c"
+        "cstdlib": "c",
+        "format": "c",
+        "ft_quotearg.h": "c",
+        "atomic": "c",
+        "*.tcc": "c",
+        "compare": "c",
+        "random": "c",
+        "fstream": "c",
+        "functional": "c",
+        "future": "c",
+        "optional": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "variant": "c",
+        "*.inc": "c",
+        "ft_minmax.h": "c",
+        "ft_quote.h": "c",
+        "stddef.h": "c",
+        "sstream": "c",
+        "ft_argmatch.h": "c"
     }
 }
